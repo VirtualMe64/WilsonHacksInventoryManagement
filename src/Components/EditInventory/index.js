@@ -14,24 +14,6 @@ const EditInventory = () => {
   const [data, setData] = React.useState([
     item("Spicy Nuts", 2, "2/6/2021", "oz", 1),
     item("Sour Nuts", 3, "2/6/2021", "oz", 2),
-    item("Sweet Nuts", 7, "2/6/2021", "oz", 3),
-    item("Legume Soup", 1, "2/6/2021", "oz", 4),
-    item("Valentine Special", 14, "2/6/2021", "oz", 5),
-    item("Spicy Nuts", 2, "2/6/2021", "oz", 6),
-    item("Sour Nuts", 3, "2/6/2021", "oz", 7),
-    item("Sweet Nuts", 7, "2/6/2021", "oz", 8),
-    item("Legume Soup", 1, "2/6/2021", "oz", 9),
-    item("Valentine Special", 14, "2/6/2021", "oz", 10),
-    item("Spicy Nuts", 2, "2/6/2021", "oz", 11),
-    item("Sour Nuts", 3, "2/6/2021", "oz", 12),
-    item("Sweet Nuts", 7, "2/6/2021", "oz", 13),
-    item("Legume Soup", 1, "2/6/2021", "oz", 14),
-    item("Valentine Special", 14, "2/6/2021", "oz", 15),
-    item("Spicy Nuts", 2, "2/6/2021", "oz", 16),
-    item("Sour Nuts", 3, "2/6/2021", "oz", 17),
-    item("Sweet Nuts", 7, "2/6/2021", "oz", 18),
-    item("Legume Soup", 1, "2/6/2021", "oz", 19),
-    item("Valentine Special", 14, "2/6/2021", "oz", 20),
   ]);
 
   const updateField = (itemId, field, newValue) => {
@@ -43,15 +25,19 @@ const EditInventory = () => {
 
   const addItem = (event) =>{
     var temp = data;
-    data.push(item("New Item", 0, "0/0/0000", "oz", 0));
-    setData(temp);    
+    setData([]);
+    temp.push(item("New Item", 0, "0/0/0000", "oz", 0));
+    setData(temp);
+    //console.log(data);
   }
 
   return (
     <div style={style.divStyle}>
-      {data.map((item) => ItemObj(item, updateField))}
+      {data.map((item) => {
+        console.log('a');
+        return <ItemObj item = {item} updateField = {(itemId, field, newValue) => updateField(itemId, field, newValue)} key={item.id}/>})}
 
-      <button style={style.floatingButton}  onChange={addItem}>
+      <button style={style.floatingButton} onClick={() => addItem()}>
         <FontAwesomeIcon
               icon={faPlus}
             />
@@ -60,7 +46,8 @@ const EditInventory = () => {
   );
 };
 
-const ItemObj = (item, updateItemFunction) => {
+const ItemObj = (props) => {
+  let {item, updateField} = props;
   const [editing, setEditing] = React.useState(false);
 
   const toggleEditing = () => {
@@ -68,16 +55,14 @@ const ItemObj = (item, updateItemFunction) => {
   };
 
   const updateName = (event) => {
-    updateItemFunction(item.id, "name", event.target.value);
+    updateField(item.id, "name", event.target.value);
   };
 
   const updateAmount = (event) => {
-    updateItemFunction(item.id, "amount", event.target.value);
+    updateField(item.id, "amount", event.target.value);
   };
 
-  const addItem = (event) => {
 
-  }
 
   return (
     <div style={style.itemDivStyle}>
@@ -114,7 +99,7 @@ const ItemObj = (item, updateItemFunction) => {
             icon={!editing ? faEdit : faSave}
             size="2x"
             color={"#FF9F1C"}
-            backgroundColor={"#011627"}
+            backgroundcolor={"#011627"}
           />
         </button>
       </RowSection>
@@ -182,11 +167,11 @@ const style = {
   },
   floatingButton: {
     position: "absolute",
-    bottom: 50 + "px",
-    left: 50 + "px",
+    bottom: 20 + "px",
+    left: 20 + "px",
     width: 100 + "px",
     height: 100 + "px",
-    borderRadius: 20,
+    borderRadius: 50,
     fontSize: 100,
     display: "flex",
     justifyContent: "center",
