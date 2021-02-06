@@ -44,7 +44,9 @@ const SignIn = (props) => {
     FirebaseAPI.signIn({ email: e ? e : email, password: p ? p : password })
       .then(() => {
         console.log("signed in");
-        saveCredentials();
+        if (!e) {
+          saveCredentials();
+        }
         props.changeView(2);
       })
       .catch((err) => {

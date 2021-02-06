@@ -9,7 +9,7 @@ const item = (name, amount, date, unit, id) => {
   return { name: name, amount: amount, date: date, unit: unit, id: id };
 };
 
-const EditInventory = () => {
+const EditInventory = (props) => {
   const [data, setData] = React.useState([
     item("Spicy Nuts", 2, "2/6/2021", "oz", 1),
     item("Sour Nuts", 3, "2/6/2021", "oz", 2),
@@ -50,7 +50,7 @@ const EditInventory = () => {
 const ItemObj = (item, updateItemFunction) => {
   const [editing, setEditing] = React.useState(false);
 
-  const units = ["oz", "lbs"]
+  const units = ["oz", "lbs"];
 
   const toggleEditing = () => {
     setEditing(!editing);
@@ -87,21 +87,29 @@ const ItemObj = (item, updateItemFunction) => {
             Amount: {item.amount} {item.unit}
           </p>
         ) : (
-          <div style={ style.amountQuantityDiv }>
+          <div style={style.amountQuantityDiv}>
             <input
               defaultValue={item.amount}
               onChange={updateAmount}
               style={style.input}
             />
-            <select name = "Units" style = { style.dropDown } defaultValue = {item.unit} onChange = {updateUnit}>
-              <option key = "None" value="" style = { style.dropDownOption }>None</option>
-              {
-              units.map((unit) => {
-                return <option key = {unit} value={unit} style = { style.dropDownOption }>{unit}</option>;
-              })
-              }
+            <select
+              name="Units"
+              style={style.dropDown}
+              defaultValue={item.unit}
+              onChange={updateUnit}
+            >
+              <option key="None" value="" style={style.dropDownOption}>
+                None
+              </option>
+              {units.map((unit) => {
+                return (
+                  <option key={unit} value={unit} style={style.dropDownOption}>
+                    {unit}
+                  </option>
+                );
+              })}
             </select>
-
           </div>
         )}
       </RowSection>
@@ -143,8 +151,8 @@ const style = {
   divStyle: {
     display: "flex",
     flexDirection: "column",
+    height: "90vh",
     backgroundColor: "#011627",
-    height: "100vh",
     overflowX: "hidden",
     overflowY: "scroll",
   },
@@ -192,7 +200,7 @@ const style = {
   amountQuantityDiv: {
     display: "flex",
     flexDirection: "row",
-  }
+  },
 };
 
 export default EditInventory;
