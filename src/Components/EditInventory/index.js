@@ -26,7 +26,7 @@ const EditInventory = () => {
   const addItem = (event) =>{
     var temp = data;
     setData([]);
-    temp.push(item("New Item", 0, "0/0/0000", "oz", 0));
+    temp.push(item("New Item", 0, "0/0/0000", "oz", new Date().getTime()));
     setData(temp);
     //console.log(data);
   }
