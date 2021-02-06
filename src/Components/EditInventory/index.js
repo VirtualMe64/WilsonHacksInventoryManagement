@@ -151,10 +151,7 @@ const style = {
   divStyle: {
     display: "flex",
     flexDirection: "column",
-    height: "90vh",
     backgroundColor: "#011627",
-    overflowX: "hidden",
-    overflowY: "scroll",
   },
   itemDivStyle: {
     //flexGrow: 1,

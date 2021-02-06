@@ -40,7 +40,9 @@ const Navigation = () => {
           />
         </button>
       </div>
-      <div>{view === 0 && <EditInventory height={"calc(100vh-100px)"} />}</div>
+      <div style={style.content}>
+        {view === 0 && <EditInventory height={"calc(100vh-100px)"} />}
+      </div>
     </div>
   );
 };
@@ -63,6 +65,10 @@ const style = {
   main: {
     overflow: "hidden",
     height: "100vh",
+  },
+  content: {
+    overflowY: "scroll",
+    height: "90vh",
   },
 };
 
