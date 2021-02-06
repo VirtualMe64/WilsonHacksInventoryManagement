@@ -3,6 +3,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { createPortal } from "react-dom";
 
 const item = (name, amount, date, unit, id) => {
@@ -40,9 +41,21 @@ const EditInventory = () => {
     setData(temp);
   };
 
+  const addItem = (event) =>{
+    var temp = data;
+    data.push(item("New Item", 0, "0/0/0000", "oz", 0));
+    setData(temp);    
+  }
+
   return (
     <div style={style.divStyle}>
       {data.map((item) => ItemObj(item, updateField))}
+
+      <button style={style.floatingButton}  onChange={addItem}>
+        <FontAwesomeIcon
+              icon={faPlus}
+            />
+      </button>
     </div>
   );
 };
@@ -61,6 +74,10 @@ const ItemObj = (item, updateItemFunction) => {
   const updateAmount = (event) => {
     updateItemFunction(item.id, "amount", event.target.value);
   };
+
+  const addItem = (event) => {
+
+  }
 
   return (
     <div style={style.itemDivStyle}>
@@ -163,6 +180,19 @@ const style = {
     marginTop: 8,
     marginRight: 8,
   },
+  floatingButton: {
+    position: "absolute",
+    bottom: 50 + "px",
+    left: 50 + "px",
+    width: 100 + "px",
+    height: 100 + "px",
+    borderRadius: 20,
+    fontSize: 100,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    outline: "none"
+  }
 };
 
 export default EditInventory;
