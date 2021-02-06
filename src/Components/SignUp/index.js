@@ -1,14 +1,16 @@
 import React from "react";
 import FirebaseAPI from "../../FirebaseAPI";
 
-const SignIn = (props) => {
+const SignUp = (props) => {
   const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [password1, setPassword1] = React.useState("");
+  const [password2, setPassword2] = React.useState("");
   const [error, setError] = React.useState("");
 
   const setters = {
     email: setEmail,
-    password: setPassword,
+    password1: setPassword1,
+    password2: setPassword2,
   };
 
   var textChange = (event) => {
@@ -16,12 +18,11 @@ const SignIn = (props) => {
     Object.values(setters)[index](event.target.value);
   };
 
-  var submitLogin = (event) => {
-    signIn();
+  var submitSignup = (event) => {
+    signUp();
   };
-
-  const signIn = () => {
-    FirebaseAPI.signIn({ email: email, password: password })
+  const signUp = () => {
+    FirebaseAPI.createUser({ email: email, password: password1 })
       .then(() => {
         console.log("signed in");
         props.changeView(2);
@@ -32,12 +33,15 @@ const SignIn = (props) => {
   };
   let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const isDisabled =
-    email === "" || password === "" || !re.test(email) || password.length < 6;
+    password1 !== password2 ||
+    password1 === "" ||
+    !re.test(email) ||
+    password1.length < 6;
 
   return (
     <div style={style.container}>
       <div style={style.main}>
-        <h1 style={style.title}>Sign In</h1>
+        <h1 style={style.title}>Sign Up</h1>
         <input
           name="email"
           id="email"
@@ -49,30 +53,40 @@ const SignIn = (props) => {
         />
 
         <input
-          name="password"
+          name="password1"
           id="password"
-          value={password}
+          value={password1}
           onChange={textChange}
           type="password"
           placeholder="Password"
           style={style.input}
         />
+        <input
+          name="password2"
+          id="password2"
+          value={password2}
+          onChange={textChange}
+          type="password"
+          placeholder="Password Again"
+          style={style.input}
+        />
         <button
           type="submit"
-          onClick={submitLogin}
-          style={isDisabled ? style.buttonDisabled : style.button}
+          onClick={submitSignup}
           disabled={isDisabled}
+          style={isDisabled ? style.buttonDisabled : style.button}
         >
-          Sign In
+          Create Account
         </button>
         <p style={style.error}>{error}</p>
+        <p style={style.error}>{error}</p>
         <div style={style.changeViewDiv}>
-          <p style={style.changeViewP}>Dont have an account?</p>
+          <p style={style.changeViewP}>Already have an account?</p>
           <button
-            onClick={() => props.changeView(1)}
+            onClick={() => props.changeView(0)}
             style={style.changeViewButton}
           >
-            Sign Up
+            Sign In
           </button>
         </div>
       </div>
@@ -95,7 +109,7 @@ const style = {
     borderRadius: 20,
     flexDirection: "column",
     display: "flex",
-    width: 70 + "vw",
+    width: 50 + "vw",
   },
   title: {
     color: "#2EC4B6",
@@ -161,4 +175,4 @@ const style = {
   },
 };
 
-export default SignIn;
+export default SignUp;

@@ -11,15 +11,10 @@ export default class FirebaseAPI {
         .createUserWithEmailAndPassword(userData.email, userData.password)
         .then((userCredentials) => {
           this.auth = userCredentials.user;
-          firebase
-            .firestore()
-            .collection("users")
-            .doc(this.auth.uid)
-            .set(userData.data)
-            .then(() => {
-              this.user = userData.data;
-              resolve();
-            });
+          resolve();
+        })
+        .catch((err) => {
+          reject(err);
         });
     });
   }
@@ -31,16 +26,10 @@ export default class FirebaseAPI {
         .signInWithEmailAndPassword(userData.email, userData.password)
         .then((userCredentials) => {
           this.auth = userCredentials.user;
-
-          firebase
-            .firestore()
-            .collection("users")
-            .doc(this.auth.uid)
-            .get()
-            .then((doc) => {
-              this.user = doc.data();
-              resolve();
-            });
+          resolve();
+        })
+        .catch((err) => {
+          reject(err);
         });
     });
   }

@@ -1,23 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import React from "react";
+import "./App.css";
+import SignIn from "./Components/SignIn";
+import SignUp from "./Components/SignUp";
+import Navigation from "./Components/Navigation";
 
 function App() {
+  const [view, setView] = React.useState(0);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div
+      className="App"
+      style={{ width: "100vw", height: "100vh", backgroundColor: "#011627" }}
+    >
+      {view === 0 && <SignIn changeView={(v) => setView(v)} />}
+      {view === 1 && <SignUp changeView={(v) => setView(v)} />}
+      {view === 2 && <Navigation changeView={(v) => setView(v)} />}
     </div>
   );
 }
