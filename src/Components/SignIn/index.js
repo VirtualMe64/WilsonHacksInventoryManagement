@@ -20,10 +20,31 @@ const SignIn = (props) => {
     signIn();
   };
 
-  const signIn = () => {
-    FirebaseAPI.signIn({ email: email, password: password })
+  React.useEffect(() => {
+    loadCredentials();
+  }, []);
+
+  var loadCredentials = () => {
+    let creds = localStorage.getItem("credentials");
+    try {
+      creds = JSON.parse(creds);
+      setEmail(creds.email);
+      setPassword(creds.password);
+      console.log("credentials loaded");
+      signIn(creds.email, creds.password);
+    } catch (err) {}
+  };
+
+  const saveCredentials = () => {
+    let creds = JSON.stringify({ email: email, password: password });
+    localStorage.setItem("credentials", creds);
+  };
+
+  const signIn = (e, p) => {
+    FirebaseAPI.signIn({ email: e ? e : email, password: p ? p : password })
       .then(() => {
         console.log("signed in");
+        saveCredentials();
         props.changeView(2);
       })
       .catch((err) => {
