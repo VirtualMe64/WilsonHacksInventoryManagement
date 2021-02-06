@@ -50,6 +50,8 @@ const EditInventory = () => {
 const ItemObj = (item, updateItemFunction) => {
   const [editing, setEditing] = React.useState(false);
 
+  const units = ["oz", "lbs"]
+
   const toggleEditing = () => {
     setEditing(!editing);
   };
@@ -60,6 +62,10 @@ const ItemObj = (item, updateItemFunction) => {
 
   const updateAmount = (event) => {
     updateItemFunction(item.id, "amount", event.target.value);
+  };
+
+  const updateUnit = (event) => {
+    updateItemFunction(item.id, "unit", event.target.value);
   };
 
   return (
@@ -81,11 +87,22 @@ const ItemObj = (item, updateItemFunction) => {
             Amount: {item.amount} {item.unit}
           </p>
         ) : (
-          <input
-            defaultValue={item.amount}
-            onChange={updateAmount}
-            style={style.input}
-          />
+          <div style={ style.amountQuantityDiv }>
+            <input
+              defaultValue={item.amount}
+              onChange={updateAmount}
+              style={style.input}
+            />
+            <select name = "Units" style = { style.dropDown } defaultValue = {item.unit} onChange = {updateUnit}>
+              <option key = "None" value="" style = { style.dropDownOption }>None</option>
+              {
+              units.map((unit) => {
+                return <option key = {unit} value={unit} style = { style.dropDownOption }>{unit}</option>;
+              })
+              }
+            </select>
+
+          </div>
         )}
       </RowSection>
       <RowSection width={"20%"}>
@@ -163,6 +180,19 @@ const style = {
     marginTop: 8,
     marginRight: 8,
   },
+  dropDown: {
+    backgroundColor: "transparent",
+    color: "#995D81",
+    borderColor: "#995D81",
+  },
+  dropDownOption: {
+    backgroundColor: "#011627",
+    color: "#995D81",
+  },
+  amountQuantityDiv: {
+    display: "flex",
+    flexDirection: "row",
+  }
 };
 
 export default EditInventory;
