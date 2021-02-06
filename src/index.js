@@ -2,9 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
+import EditInventory from "./Components/EditInventory/index";
+import reportWebVitals from "./reportWebVitals";
 import SignUp from "./Components/SignUp/index";
 import SignIn from "./Components/SignIn/index";
-import reportWebVitals from "./reportWebVitals";
+require("react-web-vector-icons/fonts");
 
 ReactDOM.render(
   <React.StrictMode>

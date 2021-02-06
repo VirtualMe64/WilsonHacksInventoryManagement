@@ -95,7 +95,7 @@ const style = {
     borderRadius: 20,
     flexDirection: "column",
     display: "flex",
-    width: 70 + "vw",
+    width: 50 + "vw",
   },
   title: {
     color: "#2EC4B6",
