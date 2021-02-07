@@ -243,7 +243,7 @@ const ItemObj = (props) => {
     <div style={style.itemDivStyle}>
       <RowSection width={"20%"}>
         {!editing ? (
-          <h2 style={{ ...style.title34 }}>{item.name}</h2>
+          <h2 style={{ ...style.title }}>{item.name}</h2>
         ) : (
           <input
             style={{ ...style.input, ...style.title }}
@@ -542,6 +542,7 @@ const style = {
   },
   itemDivStyle: {
     //flexGrow: 1,
+    minHeight: "100%",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -560,6 +561,7 @@ const style = {
     color: "#2EC4B6",
     borderBottomColor: "#2EC4B6",
     margin: 0,
+    padding: 0,
   },
   input: {
     border: "none",
