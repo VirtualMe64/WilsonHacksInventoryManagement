@@ -36,16 +36,19 @@ const EditInventory = () => {
   ]);
 
   const updateField = (itemId, field, newValue) => {
-    var temp = data;
+    var temp = Array.from(data);
     var dataIndex = temp.findIndex((x) => x.id == itemId);
     temp[dataIndex][field] = newValue;
     setData(temp);
-    console.log("WHY NO UPDATE");
+    console.log("HERE");
   };
 
   return (
     <div style={style.divStyle}>
-      {data.map((item) => ItemObj(item, updateField))}
+      {data.map((item) => {
+        console.log("AAAA");
+        return ItemObj(item, updateField)
+      })}
     </div>
   );
 };
