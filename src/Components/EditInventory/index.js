@@ -356,7 +356,6 @@ const AddValueForm = (props) => {
 
   const addValue = () => {
     addAmount(1, inputValue);
-    setInputValue(0);
   };
 
   const subtractValue = () => {
