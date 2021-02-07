@@ -32,9 +32,18 @@ var getDate = (date) => {
 
 const EditInventory = (props) => {
   const [data, setData] = React.useState([
-    item("Spicy Nuts", 2, getDate(), "oz", 1),
-    item("Sour Nuts", 3, getDate(), "oz", 2),
+    item("Tumeric-Chili Almond and Cashew", 2, getDate(), "oz", 1),
+    item("Tumeric-Chili Cashew", 3, getDate(), "oz", 2),
+    item("Savory Pecan", 12, getDate(), "oz", 3),
+    item("Chili Pecan", 17, getDate(), "oz", 4),
+    item("Boso Maple Dipped Pecans", 3, getDate(), "oz", 5),
+    item("Vanilla Candied Almond", 45, getDate(), "oz", 6),
+    item("Candied Red Peanuts", 93, getDate(), "oz", 7),
+    item("Honey Chipotle Peanut", 54, getDate(), "oz", 8),
+    item("Eight Snack Bags Variety Pack", 54, getDate(), "oz", 9),
   ]);
+
+  const [searchBarInput, setSearchBarInput] = React.useState("");
 
   const updateField = (itemId, field, newValue) => {
     var temp = Array.from(data);
@@ -99,26 +108,25 @@ const EditInventory = (props) => {
 
   const [showDiag, setShowDiag] = React.useState(false);
 
+  const handleSearchBarChange = (event) => {
+    setSearchBarInput(event.target.value);
+  }
+
   return (
     <div style={style.divStyle}>
-      {data.map((item) => {
-        console.log("a");
-        return (
-          <ItemObj
-            item={item}
-            updateField={(itemId, field, newValue) =>
-              updateField(itemId, field, newValue)
-            }
-            saveEdits={(id) => {
-              editData(data.find((x) => x.id === id));
-            }}
-            key={item.id}
-          />
-        );
-      })}
+      {data.filter((x) => searchBarInput == "" ||
+        x.name.toLowerCase().indexOf(searchBarInput.toLowerCase()) != -1).map((item) => {
+        console.log('a');
+        return <ItemObj item = {item} updateField = {(itemId, field, newValue) => updateField(itemId, field, newValue)} key={item.id}/>})}
 
-      <button style={style.floatingButton} onClick={() => setShowDiag(true)}>
-        <FontAwesomeIcon icon={faPlus} />
+      <div style={ style.searchBarDiv }>
+        <input style={style.searchBar} placeholder="Search" value={searchBarInput} onChange={handleSearchBarChange}></input>
+      </div>
+
+      <button style={style.floatingButton} onClick={() => addItem()}>
+        <FontAwesomeIcon
+              icon={faPlus}
+            />
       </button>
 
       {showDiag && (
@@ -460,6 +468,27 @@ const style = {
     fontSize: 17,
     marginTop: 8,
     marginRight: 8,
+  },
+  searchBarDiv: {
+    margin: 0,
+    padding: 0,
+    top: "3%",
+    width: "100vw",
+    position: "absolute",
+  },
+  searchBar: {
+    height: 35,
+    width: "25%",
+    marginLeft: "auto",
+    marginRight: "auto",
+    passing: "10px",
+    border: "none",
+    outline: "none",
+    borderRadius: "15px",
+    textAlign: "center",
+    fontSize: 20,
+    color: "#011627",
+    backgroundColor: "#2EC4B6",
   },
   floatingButton: {
     position: "absolute",
