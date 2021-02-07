@@ -7,6 +7,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { createPortal } from "react-dom";
 import FirebaseAPI from "../../FirebaseAPI";
+import ProgressBar from "@ramonak/react-progress-bar";
 import { getDate, item, units, AddValueForm } from "../EditInventory";
 
 const Dashboard = (props) => {
@@ -190,6 +191,16 @@ const ItemObj = (props) => {
 
   return (
     <div style={style.itemDivStyle}>
+      <ProgressBar
+        completed={
+          item.max == 0 ? 0 : Math.round((item.amount / item.max) * 100)
+        }
+        width="18vw"
+        baseBgColor="#011627"
+        bgcolor="#2EC4B6"
+        borderColor="#2EC4B6"
+        labelAlignment="center"
+      />
       {!editing ? (
         <h2 style={{ ...style.title }}>{item.name}</h2>
       ) : (
@@ -201,8 +212,8 @@ const ItemObj = (props) => {
       )}
       {!editing ? (
         <p>
-          {item.amount} {item.unit} {Math.round((item.amount / item.max) * 100)}
-          %
+          {item.amount} {item.unit} |{" "}
+          {item.max == 0 ? 0 : Math.round((item.amount / item.max) * 100)}%
         </p>
       ) : (
         <div style={style.amountQuantityDiv}>
