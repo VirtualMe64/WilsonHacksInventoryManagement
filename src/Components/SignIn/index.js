@@ -17,7 +17,8 @@ const SignIn = (props) => {
   };
 
   var submitLogin = (event) => {
-    signIn();
+    console.log("submitting");
+    signIn(null, null);
   };
 
   React.useEffect(() => {
@@ -41,6 +42,7 @@ const SignIn = (props) => {
   };
 
   const signIn = (e, p) => {
+    console.log("signing in");
     FirebaseAPI.signIn({ email: e ? e : email, password: p ? p : password })
       .then(() => {
         console.log("signed in");
@@ -81,8 +83,7 @@ const SignIn = (props) => {
           style={style.input}
         />
         <button
-          type="submit"
-          onSubmit={submitLogin}
+          onClick={() => submitLogin()}
           style={isDisabled ? style.buttonDisabled : style.button}
           disabled={isDisabled}
         >
