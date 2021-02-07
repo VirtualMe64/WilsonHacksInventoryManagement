@@ -12,6 +12,7 @@ import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { createPortal } from "react-dom";
 import FirebaseAPI from "../../FirebaseAPI";
+import Sorting from "./Sorting";
 
 const item = (name, amount, date, unit, id, warning, max) => {
   return {
@@ -157,15 +158,22 @@ const EditInventory = (props) => {
   const handleSearchBarChange = (event) => {
     setSearchBarInput(event.target.value);
   };
+  const [sortMethod, changeSort] = React.useState(() => (a, b) => {
+      if(a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+      if(a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+      return 0;
+  })
 
   return (
     <div style={style.divStyle}>
+      <Sorting sortFunction={changeSort}/>
       {data
         .filter(
           (x) =>
             searchBarInput == "" ||
             x.name.toLowerCase().indexOf(searchBarInput.toLowerCase()) != -1
         )
+        .sort(sortMethod)
         .map((item) => {
           console.log("a");
           return (
