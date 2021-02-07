@@ -48,7 +48,7 @@ export default class FirebaseAPI {
         .then((querySnapshot) => {
           let snap = [];
           querySnapshot.forEach((doc) => {
-            snap.push(doc.data());
+            snap.push({ ...doc.data(), id: doc.id });
           });
           resolve(snap);
         });
@@ -67,13 +67,13 @@ export default class FirebaseAPI {
     });
   }
 
-  static editItem(data) {
+  static editItem(data, id) {
     return new Promise((resolve, reject) => {
       firebase
         .firestore()
         .collection(this.auth.uid)
-        .doc(data.id)
-        .update(data.update)
+        .doc(id)
+        .update(data)
         .then(() => {
           resolve();
         });

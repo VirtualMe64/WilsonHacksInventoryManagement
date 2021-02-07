@@ -6,21 +6,29 @@ import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { createPortal } from "react-dom";
+import FirebaseAPI from "../../FirebaseAPI";
 
 const item = (name, amount, date, unit, id) => {
   return { name: name, amount: amount, date: date, unit: unit, id: id };
 };
+const units = ["oz", "lbs"];
 
-var getDate = () => {
-  var currentdate = new Date();
-  var out = currentdate.getDate() + "/"
-  + (currentdate.getMonth()+1)  + "/" 
-  + currentdate.getFullYear() + " @ "  
-  + (currentdate.getHours() < 10 ? ("0" + currentdate.getHours()) : currentdate.getHours()) + ":"  
-  + (currentdate.getMinutes() < 10 ? ("0" + currentdate.getMinutes()) : currentdate.getMinutes()) + ":" 
-  + (currentdate.getSeconds() < 10 ? ("0" + currentdate.getSeconds()) : currentdate.getSeconds());
-  return(out);
-}
+var getDate = (date) => {
+  var currentdate = new Date(date);
+  var out =
+    currentdate.getDate() +
+    "/" +
+    (currentdate.getMonth() + 1) +
+    "/" +
+    currentdate.getFullYear() +
+    " @ " +
+    currentdate.getHours() +
+    ":" +
+    currentdate.getMinutes() +
+    ":" +
+    currentdate.getSeconds();
+  return out;
+};
 
 const EditInventory = (props) => {
   const [data, setData] = React.useState([
@@ -36,13 +44,60 @@ const EditInventory = (props) => {
     console.log("HERE");
   };
 
-  const addItem = (event) => {
-    var temp = Array.from(data);
-    setData([]);
-    temp.push(item("New Item", 0, getDate(), "oz", new Date().getTime()));
-    setData(temp);
+  const getData = () => {
+    let vals = [];
+    FirebaseAPI.getItems().then((data) => {
+      data.forEach((element) => {
+        vals.push(
+          item(
+            element.name,
+            element.amount,
+            element.date,
+            element.unit,
+            element.id
+          )
+        );
+      });
+      console.log("JSON: " + JSON.stringify(vals));
+      setData(vals);
+    });
+  };
+
+  const editData = (data) => {
+    let editedItem = data;
+    let id = editedItem.id;
+    delete editedItem.id;
+    editedItem.date = new Date().getTime();
+    console.log("Update JSON: " + JSON.stringify(editedItem));
+    FirebaseAPI.editItem(editedItem, id).then(() => {
+      console.log("added item");
+      getData();
+    });
+  };
+
+  React.useEffect(() => {
+    getData();
+  }, []);
+
+  const addItem = (name, amount, unit) => {
+    //var temp = Array.from(data);
+    var newItem = {
+      name: name,
+      amount: parseFloat(amount),
+      date: new Date().getTime(),
+      unit: unit,
+    };
+    //temp.push(newItem);
+    FirebaseAPI.addItem(newItem).then(() => {
+      console.log("added item");
+      getData();
+    });
+
+    //setData(temp);
     //console.log(data);
   };
+
+  const [showDiag, setShowDiag] = React.useState(false);
 
   return (
     <div style={style.divStyle}>
@@ -54,16 +109,24 @@ const EditInventory = (props) => {
             updateField={(itemId, field, newValue) =>
               updateField(itemId, field, newValue)
             }
+            saveEdits={(id) => {
+              editData(data.find((x) => x.id === id));
+            }}
             key={item.id}
           />
         );
       })}
 
-      <button style={style.floatingButton} onClick={() => addItem()}>
+      <button style={style.floatingButton} onClick={() => setShowDiag(true)}>
         <FontAwesomeIcon icon={faPlus} />
       </button>
 
-      <NewItemDialogue />
+      {showDiag && (
+        <NewItemDialogue
+          cancel={() => setShowDiag(false)}
+          createItem={addItem}
+        />
+      )}
     </div>
   );
 };
@@ -72,30 +135,37 @@ const ItemObj = (props) => {
   let { item, updateField } = props;
   const [editing, setEditing] = React.useState(false);
 
-  const units = ["oz", "lbs"];
-
   const toggleEditing = () => {
+    if (editing) {
+      props.saveEdits(item.id);
+    }
     setEditing(!editing);
   };
 
   const addAmount = (amountToAdd) => {
-    updateField(item.id, "amount", (Math.round(100 * parseFloat(item.amount)) + Math.round(100 * parseFloat(amountToAdd))) / 100)
-    updateField(item.id, "date", getDate())
-  }
+    updateField(
+      item.id,
+      "amount",
+      (Math.round(100 * parseFloat(item.amount)) +
+        Math.round(100 * parseFloat(amountToAdd))) /
+        100
+    );
+    updateField(item.id, "date", new Date());
+  };
 
   const updateName = (event) => {
     updateField(item.id, "name", event.target.value);
-    updateField(item.id, "date", getDate())
+    updateField(item.id, "date", new Date());
   };
 
   const updateAmount = (event) => {
     updateField(item.id, "amount", event.target.value);
-    updateField(item.id, "date", getDate());
+    updateField(item.id, "date", new Date());
   };
 
   const updateUnit = (event) => {
     updateField(item.id, "unit", event.target.value);
-    updateField(item.id, "date", getDate());
+    updateField(item.id, "date", new Date());
   };
 
   return (
@@ -143,8 +213,8 @@ const ItemObj = (props) => {
           </div>
         )}
       </RowSection>
-      <RowSection width={"20%"}>
-        <p>Last Edited: {item.date}</p>
+      <RowSection width={"30%"}>
+        <p>Last Edited: {getDate(item.date)}</p>
       </RowSection>
       <RowSection width={"20%"}>
         <AddValueForm addAmountFunction={addAmount} />
@@ -192,10 +262,10 @@ const AddValueForm = (props) => {
       alert("Invalid input!");
       setInputValue(0);
     } else if (parseFloat(value) < 0) {
-      alert("Invalid input: negative number")
+      alert("Invalid input: negative number");
       setInputValue(0);
     } else {
-      props.addAmountFunction(Math.round((sign * value) * 100) / 100);
+      props.addAmountFunction(Math.round(sign * value * 100) / 100);
     }
   };
 
@@ -237,6 +307,120 @@ const AddValueForm = (props) => {
       </button>
     </div>
   );
+};
+const NewItemDialogue = (props) => {
+  const [name, setName] = React.useState("");
+  const [amount, setAmount] = React.useState("");
+  const [drop, setDrop] = React.useState("None");
+  return (
+    <div style={dialogueStyle.main}>
+      <div style={dialogueStyle.container}>
+        <h1 style={dialogueStyle.title}>New Inventory Item</h1>
+        <input
+          name="name"
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          type="text"
+          placeholder="Name"
+          style={style.input}
+        />
+        <input
+          name="amount"
+          id="amount"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          type="text"
+          placeholder="Amount"
+          pattern="\d+"
+          style={{ ...style.input, color: "#995D81", marginBottom: 8 }}
+        />
+        <select
+          name="Units"
+          style={style.dropDown}
+          onChange={(e) => setDrop(e.target.value)}
+          value={drop}
+        >
+          <option key="None" value="" style={style.dropDownOption}>
+            None
+          </option>
+          {units.map((unit) => {
+            return (
+              <option key={unit} value={unit} style={style.dropDownOption}>
+                {unit}
+              </option>
+            );
+          })}
+        </select>
+        <button
+          onClick={() => {
+            props.createItem(name, amount, drop);
+            props.cancel();
+          }}
+          style={false ? dialogueStyle.buttonDisabled : dialogueStyle.button}
+          disabled={false}
+        >
+          Create
+        </button>
+        <button
+          onClick={() => {
+            props.cancel();
+          }}
+          style={{ ...dialogueStyle.button, backgroundColor: "#995d81" }}
+          disabled={false}
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+};
+const dialogueStyle = {
+  main: {
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+  },
+  container: {
+    width: "50%",
+    justifyContent: "center",
+    backgroundColor: "#011627",
+    border: "solid 1px #FDFFFC",
+    borderRadius: 20,
+    display: "flex",
+    flexDirection: "column",
+    margin: "auto",
+    padding: 16,
+  },
+  title: {
+    color: "#2EC4B6",
+    width: "100%",
+    textAlign: "center",
+  },
+  button: {
+    width: 100 + "%",
+    border: "none",
+    backgroundColor: "#2EC4B6",
+    color: "#FDFFFC",
+    outline: "none",
+    fontSize: 17,
+    marginTop: 8,
+    padding: 8,
+    borderRadius: 10,
+  },
+  buttonDisabled: {
+    width: 100 + "%",
+    border: "none",
+    backgroundColor: "#849695",
+    color: "#FDFFFC",
+    outline: "none",
+    fontSize: 17,
+    marginTop: 8,
+    padding: 8,
+    borderRadius: 10,
+  },
 };
 
 const style = {
@@ -294,6 +478,7 @@ const style = {
     backgroundColor: "transparent",
     color: "#995D81",
     borderColor: "#995D81",
+    outline: "none",
   },
   dropDownOption: {
     backgroundColor: "#011627",
