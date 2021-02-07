@@ -35,14 +35,14 @@ const SortingBar = (props) => {
     const updateDirection = (name) => {
         console.log("state changed");
         changeState((s) => {
-            var temp = Array.from(s);
             if(s.name == name){
-                temp.direction = !temp.direction;
+                s.direction = !s.direction;
             }
             else{
-                temp.name = name;
-                temp.direction = true;
+                s.name = name;
+                s.direction = true;
             }
+            return(s)
         })
     }
 
