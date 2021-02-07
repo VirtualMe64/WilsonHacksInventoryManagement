@@ -70,7 +70,7 @@ const ItemObj = (props) => {
   };
 
   const addAmount = (amountToAdd) => {
-    updateField(item.id, "amount", parseInt(item.amount) + parseInt(amountToAdd))
+    updateField(item.id, "amount", (Math.round(100 * parseFloat(item.amount)) + Math.round(100 * parseFloat(amountToAdd))) / 100)
     updateField(item.id, "date", getDate())
   }
 
@@ -181,14 +181,14 @@ const AddValueForm = (props) => {
   }
 
   const addAmount = (sign, value) => {
-    if (isNaN(parseInt(value))) {
+    if (isNaN(parseFloat(value))) {
       alert("Invalid input!");
       setInputValue(0);
-    } else if (parseInt(value) < 0) {
+    } else if (parseFloat(value) < 0) {
       alert("Invalid input: negative number")
       setInputValue(0);
     } else {
-      props.addAmountFunction(sign * value);
+      props.addAmountFunction(Math.round((sign * value) * 100) / 100);
     }
   }
 
@@ -208,7 +208,7 @@ const AddValueForm = (props) => {
         color="#1ced4a"
         backgroundColor="#011627"
       /> </button>
-      <input style = {{ textAlign: "center", width:"20%", ...style.input }} type = "number" min = {0} pattern="\d+" 
+      <input style = {{ textAlign: "center", width:"20%", ...style.input }} type = "number" min = {0} step = "any" pattern="\d+" 
       onChange = {onChange} value = {inputValue}>
       </input>
       <button style={ style.iconButton } onClick = {subtractValue}> <FontAwesomeIcon
