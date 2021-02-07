@@ -67,7 +67,6 @@ const EditInventory = (props) => {
     temp[dataIndex][field] = newValue;
     setData(temp);
     console.log("HERE");
-    editData(data[dataIndex]);
   };
 
   const getData = () => {
@@ -159,14 +158,14 @@ const EditInventory = (props) => {
     setSearchBarInput(event.target.value);
   };
   const [sortMethod, changeSort] = React.useState(() => (a, b) => {
-      if(a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-      if(a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-      return 0;
-  })
+    if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+    if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+    return 0;
+  });
 
   return (
     <div style={style.divStyle}>
-      <Sorting sortFunction={changeSort}/>
+      <Sorting sortFunction={changeSort} />
       {data
         .filter(
           (x) =>
@@ -220,11 +219,11 @@ const ItemObj = (props) => {
 
   const toggleEditing = () => {
     if (editing) {
-        updateField(item.id, "unit", tempUnit.toString());
-        updateField(item.id, "amount", parseFloat(tempAmount.toString()));
-        updateField(item.id, "name", tempName.toString());
-        updateField(item.id, "date", new Date().getTime());
-        props.saveEdits(item.id);
+      updateField(item.id, "unit", tempUnit.toString());
+      updateField(item.id, "amount", parseFloat(tempAmount.toString()));
+      updateField(item.id, "name", tempName.toString());
+      updateField(item.id, "date", new Date().getTime());
+      props.saveEdits(item.id);
     } else {
       setTempName(item.name);
       setTempAmount(item.amount);
@@ -290,8 +289,8 @@ const ItemObj = (props) => {
       <RowSection width={"20%"}>
         {!editing ? (
           <p>
-            Amount: {item.amount} {item.unit}{" "}
-             | {item.max == 0 ? 0: Math.round((item.amount / item.max) * 100)}%
+            Amount: {item.amount} {item.unit} |{" "}
+            {item.max == 0 ? 0 : Math.round((item.amount / item.max) * 100)}%
           </p>
         ) : (
           <div style={style.amountQuantityDiv}>
