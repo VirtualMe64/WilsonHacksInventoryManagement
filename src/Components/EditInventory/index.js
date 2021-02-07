@@ -8,8 +8,15 @@ import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { createPortal } from "react-dom";
 import FirebaseAPI from "../../FirebaseAPI";
 
-const item = (name, amount, date, unit, id) => {
-  return { name: name, amount: amount, date: date, unit: unit, id: id };
+const item = (name, amount, date, unit, id, warning) => {
+  return {
+    name: name,
+    amount: amount,
+    date: date,
+    unit: unit,
+    id: id,
+    warning: warning ? warning : 0,
+  };
 };
 const units = ["oz", "lbs"];
 
@@ -102,13 +109,14 @@ const EditInventory = (props) => {
     });
   }, []);
 
-  const addItem = (name, amount, unit) => {
+  const addItem = (name, amount, unit, warning) => {
     //var temp = Array.from(data);
     var newItem = {
       name: name,
       amount: parseFloat(amount),
       date: new Date().getTime(),
       unit: unit,
+      warning: parseFloat(warning),
     };
     //temp.push(newItem);
     FirebaseAPI.addItem(newItem).then(() => {
@@ -156,8 +164,8 @@ const EditInventory = (props) => {
         ></input>
       </div>
 
-      <button style={style.floatingButton} onClick={() => addItem()}>
-        <FontAwesomeIcon icon={faPlus} />
+      <button style={style.floatingButton} onClick={() => setShowDiag(true)}>
+        <FontAwesomeIcon icon={faPlus} size="4x" color={"#011627"} />
       </button>
 
       {showDiag && (
@@ -211,7 +219,7 @@ const ItemObj = (props) => {
     <div style={style.itemDivStyle}>
       <RowSection width={"20%"}>
         {!editing ? (
-          <h2 style={style.title}>{item.name}</h2>
+          <h2 style={{ ...style.title }}>{item.name}</h2>
         ) : (
           <input
             style={{ ...style.input, ...style.title }}
@@ -282,6 +290,7 @@ const RowSection = (props) => {
         width: props.width,
         color: "#995D81",
         fontSize: 17,
+        padding: 8,
       }}
     >
       {props.children}
@@ -310,6 +319,7 @@ const AddValueForm = (props) => {
 
   const addValue = () => {
     addAmount(1, inputValue);
+    setInputValue(0);
   };
 
   const subtractValue = () => {
@@ -323,7 +333,7 @@ const AddValueForm = (props) => {
         <FontAwesomeIcon
           icon={faPlus}
           size="2x"
-          color="#1ced4a"
+          color="#2EC4B6"
           backgroundColor="#011627"
         />{" "}
       </button>
@@ -340,7 +350,7 @@ const AddValueForm = (props) => {
         <FontAwesomeIcon
           icon={faMinus}
           size="2x"
-          color="#e02b34"
+          color="#995D81"
           backgroundColor="#011627"
         />{" "}
       </button>
@@ -350,6 +360,7 @@ const AddValueForm = (props) => {
 const NewItemDialogue = (props) => {
   const [name, setName] = React.useState("");
   const [amount, setAmount] = React.useState("");
+  const [warning, setWarning] = React.useState("");
   const [drop, setDrop] = React.useState("None");
   return (
     <div style={dialogueStyle.main}>
@@ -374,6 +385,16 @@ const NewItemDialogue = (props) => {
           pattern="\d+"
           style={{ ...style.input, color: "#995D81", marginBottom: 8 }}
         />
+        <input
+          name="warning"
+          id="warning"
+          value={warning}
+          onChange={(e) => setWarning(e.target.value)}
+          type="text"
+          placeholder="Warning Threshold"
+          pattern="\d+"
+          style={{ ...style.input, color: "#995D81", marginBottom: 8 }}
+        />
         <select
           name="Units"
           style={style.dropDown}
@@ -393,7 +414,7 @@ const NewItemDialogue = (props) => {
         </select>
         <button
           onClick={() => {
-            props.createItem(name, amount, drop);
+            props.createItem(name, amount, drop, warning);
             props.cancel();
           }}
           style={false ? dialogueStyle.buttonDisabled : dialogueStyle.button}
@@ -426,7 +447,7 @@ const dialogueStyle = {
     width: "50%",
     justifyContent: "center",
     backgroundColor: "#011627",
-    border: "solid 1px #FDFFFC",
+    border: "solid 1px 3",
     borderRadius: 20,
     display: "flex",
     flexDirection: "column",
@@ -438,6 +459,7 @@ const dialogueStyle = {
     color: "#2EC4B6",
     width: "100%",
     textAlign: "center",
+    margin: 8,
   },
   button: {
     width: 100 + "%",
@@ -478,7 +500,7 @@ const style = {
     borderRadius: 20,
     padding: 8,
     margin: 8,
-    height: "40px",
+    justifyContent: "center",
   },
   iconButton: {
     backgroundColor: "#011627",
@@ -488,6 +510,7 @@ const style = {
   title: {
     color: "#2EC4B6",
     borderBottomColor: "#2EC4B6",
+    margin: 0,
   },
   input: {
     border: "none",
@@ -526,8 +549,8 @@ const style = {
     position: "absolute",
     bottom: 20 + "px",
     left: 20 + "px",
-    width: 100 + "px",
-    height: 100 + "px",
+    width: 60 + "px",
+    height: 60 + "px",
     borderRadius: 50,
     display: "flex",
     justifyContent: "center",
@@ -535,10 +558,10 @@ const style = {
     outline: "none",
     border: "none",
     backgroundColor: "#2EC4B6",
-    boxShadow: "-2px 2px 10px 1px grey",
+    boxShadow: "-2px 2px 10px 3px #011627",
   },
   dropDown: {
-    backgroundColor: "transparent",
+    backgroundColor: "#011627",
     color: "#995D81",
     borderColor: "#995D81",
     outline: "none",
