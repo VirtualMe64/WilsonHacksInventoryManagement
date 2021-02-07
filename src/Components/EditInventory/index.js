@@ -1,9 +1,10 @@
 import { findByLabelText } from "@testing-library/react";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faStickyNote } from "@fortawesome/free-solid-svg-icons";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { createPortal } from "react-dom";
 
 const item = (name, amount, date, unit, id) => {
@@ -21,6 +22,7 @@ const EditInventory = () => {
     var dataIndex = temp.findIndex((x) => x.id == itemId);
     temp[dataIndex][field] = newValue;
     setData(temp);
+    console.log("HERE");
   };
 
   const addItem = (event) =>{
@@ -55,6 +57,10 @@ const ItemObj = (props) => {
   const toggleEditing = () => {
     setEditing(!editing);
   };
+
+  const addAmount = (amountToAdd) => {
+    updateItemFunction(item.id, "amount", parseInt(item.amount) + parseInt(amountToAdd))
+  }
 
   const updateName = (event) => {
     updateField(item.id, "name", event.target.value);
@@ -123,6 +129,9 @@ const ItemObj = (props) => {
       <RowSection width={"20%"}>
         <p>Last Edited: {item.date}</p>
       </RowSection>
+      <RowSection width={"20%"}>
+        <AddValueForm addAmountFunction = {addAmount} />
+      </RowSection>
       <RowSection style={{ marginLeft: "auto", paddingRight: 20 }}>
         <button style={{ ...style.iconButton }} onClick={toggleEditing}>
           <FontAwesomeIcon
@@ -153,6 +162,54 @@ const RowSection = (props) => {
     </div>
   );
 };
+
+const AddValueForm = (props) => {
+  const [inputValue, setInputValue] = React.useState(0);
+
+  const onChange = (event) => {
+    setInputValue(event.target.value)
+  }
+
+  const addAmount = (sign, value) => {
+    if (isNaN(parseInt(value))) {
+      alert("Invalid input!");
+      setInputValue(0);
+    } else if (parseInt(value) < 0) {
+      alert("Invalid input: negative number")
+      setInputValue(0);
+    } else {
+      props.addAmountFunction(sign * value);
+    }
+  }
+
+  const addValue = () => {
+    addAmount(1, inputValue);
+  }
+
+  const subtractValue = () => {
+    addAmount(-1, inputValue);
+  }
+
+  return (
+    <div>
+      <button style={ style.iconButton } onClick = {addValue}> <FontAwesomeIcon
+        icon={faPlus}
+        size="2x"
+        color="#1ced4a"
+        backgroundColor="#011627"
+      /> </button>
+      <input style = {{ textAlign: "center", width:"20%", ...style.input }} type = "number" min = {0} pattern="\d+" 
+      onChange = {onChange} value = {inputValue}>
+      </input>
+      <button style={ style.iconButton } onClick = {subtractValue}> <FontAwesomeIcon
+        icon={faMinus}
+        size="2x"
+        color="#e02b34"
+        backgroundColor="#011627"
+      /> </button>
+    </div>
+  )
+}
 
 const style = {
   divStyle: {
