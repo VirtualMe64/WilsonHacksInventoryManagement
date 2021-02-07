@@ -58,27 +58,26 @@ const Dashboard = (props) => {
   React.useEffect(() => {
     let t = [];
     let f = [];
+
+    let k = [];
+    let l = [];
     for (var i = 0; i < data.length; i++) {
       if (data[i].amount <= data[i].warning) {
         f.push(data[i]);
         console.log("adding f item");
+      } else if (
+        data[i].amount <= data[i].warning * 1.25 &&
+        data[i].amount > data[i].warning
+      ) {
+        k.push(data[i]);
+        console.log("adding k item");
+      } else {
+        l.push(data[i]);
       }
     }
     t.push(f);
-    let k = [];
-    for (var i = 0; i < data.length; i++) {
-      try {
-        if (
-          data[i].amount < data[i].warning + data[i].warning * 0.25 &&
-          data[i].amount > data[i].warning
-        ) {
-          k.push(data[i]);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
     t.push(k);
+    t.push(l);
 
     for (var s = 0; s < t.length; s++) {
       let r = [];
@@ -117,15 +116,25 @@ const Dashboard = (props) => {
     });
   };
 
+  let show =
+    d2Data[0].length > 0 || d2Data[1].length > 0 || d2Data[2].length > 0;
   return (
     <div style={style.divStyle}>
-      {d2Data[0].length > 0 &&
+      {show &&
         d2Data.map((i, index) => {
           return (
             <div style={style.section}>
-              <h1 style={style.sectionTitle}>
-                {index === 0 ? "Warning Level Low" : "Level Aproaching Low"}
-              </h1>
+              {i.length > 0 && (
+                <h1 style={style.sectionTitle}>
+                  {i.length > 0
+                    ? index === 0
+                      ? "Warning Level Low"
+                      : index === 1
+                      ? "Level Aproaching Low"
+                      : "Good"
+                    : ""}
+                </h1>
+              )}
               {i.map((r, index) => {
                 console.log("r: " + JSON.stringify(r));
                 return (
