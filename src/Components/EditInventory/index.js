@@ -13,7 +13,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { createPortal } from "react-dom";
 import FirebaseAPI from "../../FirebaseAPI";
 
-const item = (name, amount, date, unit, id, warning) => {
+const item = (name, amount, date, unit, id, warning, max) => {
   return {
     name: name,
     amount: amount,
@@ -21,6 +21,7 @@ const item = (name, amount, date, unit, id, warning) => {
     unit: unit,
     id: id,
     warning: warning ? warning : 0,
+    max: max ? max : amount,
   };
 };
 const units = ["oz", "lbs"];
@@ -78,7 +79,9 @@ const EditInventory = (props) => {
             element.amount,
             element.date,
             element.unit,
-            element.id
+            element.id,
+            element.warning,
+            element.max
           )
         );
       });
@@ -91,6 +94,9 @@ const EditInventory = (props) => {
     let editedItem = data;
     let id = editedItem.id;
     delete editedItem.id;
+    if (editedItem.amount > editedItem.max) {
+      editedItem.max = editedItem.amount;
+    }
     console.log("Update JSON: " + JSON.stringify(editedItem));
     FirebaseAPI.editItem(editedItem, id).then(() => {
       console.log("added item");
@@ -108,7 +114,9 @@ const EditInventory = (props) => {
             element.amount,
             element.date,
             element.unit,
-            element.id
+            element.id,
+            element.warning,
+            element.max
           )
         );
       });
@@ -124,6 +132,7 @@ const EditInventory = (props) => {
       date: new Date().getTime(),
       unit: unit,
       warning: parseFloat(warning),
+      max: parseFloat(amount),
     };
     //temp.push(newItem);
     FirebaseAPI.addItem(newItem).then(() => {
@@ -178,7 +187,6 @@ const EditInventory = (props) => {
         value={searchBarInput}
         onChange={handleSearchBarChange}
       ></input>
-      
 
       <button style={style.floatingButton} onClick={() => setShowDiag(true)}>
         <FontAwesomeIcon icon={faPlus} size="4x" color={"#011627"} />
@@ -261,7 +269,8 @@ const ItemObj = (props) => {
       <RowSection width={"20%"}>
         {!editing ? (
           <p>
-            Amount: {item.amount} {item.unit}
+            Amount: {item.amount} {item.unit}{" "}
+            {Math.round((item.amount / item.max) * 100)}%
           </p>
         ) : (
           <div style={style.amountQuantityDiv}>
