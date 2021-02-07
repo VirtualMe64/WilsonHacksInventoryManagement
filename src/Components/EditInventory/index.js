@@ -159,14 +159,24 @@ const AddValueForm = (props) => {
     setInputValue(event.target.value)
   }
 
+  const addAmount = (sign, value) => {
+    if (isNaN(parseInt(value))) {
+      alert("Invalid input!");
+      setInputValue(0);
+    } else if (parseInt(value) < 0) {
+      alert("Invalid input: negative number")
+      setInputValue(0);
+    } else {
+      props.addAmountFunction(sign * value);
+    }
+  }
+
   const addValue = () => {
-    props.addAmountFunction(inputValue)
-    setInputValue(0);
+    addAmount(1, inputValue);
   }
 
   const subtractValue = () => {
-    props.addAmountFunction(-1 * inputValue)
-    setInputValue(0);
+    addAmount(-1, inputValue);
   }
 
   return (
@@ -177,7 +187,7 @@ const AddValueForm = (props) => {
         color="#1ced4a"
         backgroundColor="#011627"
       /> </button>
-      <input style = {{ textAlign: "center", width:"20%", ...style.input }} type = "number"
+      <input style = {{ textAlign: "center", width:"20%", ...style.input }} type = "number" min = {0} pattern="\d+" 
       onChange = {onChange} value = {inputValue}>
       </input>
       <button style={ style.iconButton } onClick = {subtractValue}> <FontAwesomeIcon
