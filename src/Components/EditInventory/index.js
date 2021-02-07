@@ -278,7 +278,7 @@ const ItemObj = (props) => {
         {!editing ? (
           <p>
             Amount: {item.amount} {item.unit}{" "}
-            {Math.round((item.amount / item.max) * 100)}%
+             | {item.max == 0 ? 0: Math.round((item.amount / item.max) * 100)}%
           </p>
         ) : (
           <div style={style.amountQuantityDiv}>
