@@ -52,6 +52,7 @@ const style = {
     width: "100vw",
     display: "flex",
     flexDirection: "row",
+    borderBottom: "1px solid #a9a9a9",
   },
   barButtons: {
     margin: 8,
