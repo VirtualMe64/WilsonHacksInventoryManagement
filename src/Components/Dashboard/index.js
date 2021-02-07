@@ -69,10 +69,11 @@ const Dashboard = (props) => {
     for (var i = 0; i < data.length; i++) {
       try {
         if (
-          data[i].amount < data[i].warning + data[i].warning * 0.25 &&
+          data[i].amount <= data[i].warning * 1.5 &&
           data[i].amount > data[i].warning
         ) {
           k.push(data[i]);
+          console.log("adding k item");
         }
       } catch (err) {
         console.log(err);
@@ -117,14 +118,19 @@ const Dashboard = (props) => {
     });
   };
 
+  let show = d2Data[0].length > 0 || d2Data[1].length > 0;
   return (
     <div style={style.divStyle}>
-      {d2Data[0].length > 0 &&
+      {show &&
         d2Data.map((i, index) => {
           return (
             <div style={style.section}>
               <h1 style={style.sectionTitle}>
-                {index === 0 ? "Warning Level Low" : "Level Aproaching Low"}
+                {i.length > 0
+                  ? index === 0
+                    ? "Warning Level Low"
+                    : "Level Aproaching Low"
+                  : ""}
               </h1>
               {i.map((r, index) => {
                 console.log("r: " + JSON.stringify(r));
