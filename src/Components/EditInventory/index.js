@@ -388,7 +388,8 @@ const NewItemDialogue = (props) => {
   const [name, setName] = React.useState("");
   const [amount, setAmount] = React.useState("");
   const [warning, setWarning] = React.useState("");
-  const [drop, setDrop] = React.useState("None");
+  const [drop, setDrop] = React.useState("");
+
   return (
     <div style={dialogueStyle.main}>
       <div style={dialogueStyle.container}>
@@ -407,9 +408,9 @@ const NewItemDialogue = (props) => {
           id="amount"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
-          type="text"
+          type="number"
           placeholder="Amount"
-          pattern="\d+"
+          pattern="\d*"
           style={{ ...style.input, color: "#995D81", marginBottom: 8 }}
         />
         <input
@@ -441,7 +442,12 @@ const NewItemDialogue = (props) => {
         </select>
         <button
           onClick={() => {
-            props.createItem(name, amount, drop, warning);
+            var initAmount = parseFloat(amount);
+            var amountToUse = 0;
+            if (!isNaN(initAmount)) {
+              amountToUse = Math.round(100 * amount) / 100;
+            }
+            props.createItem(name, amountToUse, drop, warning);
             props.cancel();
           }}
           style={false ? dialogueStyle.buttonDisabled : dialogueStyle.button}
