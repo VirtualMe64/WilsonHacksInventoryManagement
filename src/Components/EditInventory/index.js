@@ -140,7 +140,12 @@ const EditInventory = (props) => {
   const handleSearchBarChange = (event) => {
     setSearchBarInput(event.target.value);
   };
-  const [sortMethod, changeSort] = React.useState(null)
+  const [sortMethod, changeSort] = React.useState(() => (a, b) => {
+      if(a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+      if(a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+      return 0;
+  })
+
   return (
     <div style={style.divStyle}>
       <Sorting sortFunction={changeSort}/>

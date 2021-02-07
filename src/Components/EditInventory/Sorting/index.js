@@ -27,7 +27,7 @@ const sortOptions = [
 ]
 const SortingBar = (props) => {
     const [state, changeState] = React.useState({
-        name: "Last Changed",
+        name: "Name",
         //true is up
         direction: true
     });
@@ -44,20 +44,28 @@ const SortingBar = (props) => {
             }
             return temp
         })
-        props.sortFunction(sortingMethod())
+        props.sortFunction(() => sortingMethod())
     }
 
-    const nameSort = (x,y) => {
-        return x.name.toLowerCase().compareTo(y.name.toLowerCase()) > 0
+    const nameSort = (a, b) => {
+        console.log("I am now name sorting")
+        if(a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+        if(a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+        return 0;
     }
-    const quantitySort = (x,y) => {
-        if(x.unit !== y.unit){
-            return x.unit.compareTo(y.unit)
+
+    const quantitySort = (a, b) => {
+        console.log("I am now quantity sorting")
+        if(a.unit !== b.unit){
+            if(a.unit.toLowerCase() < b.unit.toLowerCase()) return -1;
+            if(a.unit.toLowerCase() > b.unit.toLowerCase()) return 1;
         }
-        return x.amount > y.amount
+        return a.amount - b.amount
     }
-    const dateSort = (x,y) => {
-        return x.date.getTime() < y.date.getTime()
+    const dateSort = (a, b) => {
+        if (a.date.getTime() > b.date.getTime()) return 1;
+        if (a.date.getTime() == b.date.getTime()) return 0;
+        if (a.date.getTime() < b.date.getTime()) return -1;
     }
 
     const sortingMethod = () => {
