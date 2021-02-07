@@ -11,10 +11,21 @@ const item = (name, amount, date, unit, id) => {
   return { name: name, amount: amount, date: date, unit: unit, id: id };
 };
 
+var getDate = () => {
+  var currentdate = new Date();
+  var out = currentdate.getDate() + "/"
+  + (currentdate.getMonth()+1)  + "/" 
+  + currentdate.getFullYear() + " @ "  
+  + currentdate.getHours() + ":"  
+  + currentdate.getMinutes() + ":" 
+  + currentdate.getSeconds();
+  return(out);
+}
+
 const EditInventory = (props) => {
   const [data, setData] = React.useState([
-    item("Spicy Nuts", 2, "2/6/2021", "oz", 1),
-    item("Sour Nuts", 3, "2/6/2021", "oz", 2),
+    item("Spicy Nuts", 2, getDate(), "oz", 1),
+    item("Sour Nuts", 3, getDate(), "oz", 2),
   ]);
 
   const updateField = (itemId, field, newValue) => {
@@ -28,7 +39,7 @@ const EditInventory = (props) => {
   const addItem = (event) =>{
     var temp = Array.from(data);
     setData([]);
-    temp.push(item("New Item", 0, "0/0/0000", "oz", new Date().getTime()));
+    temp.push(item("New Item", 0, getDate(), "oz", new Date().getTime()));
     setData(temp);
     //console.log(data);
   }
@@ -60,22 +71,13 @@ const ItemObj = (props) => {
 
   const addAmount = (amountToAdd) => {
     updateField(item.id, "amount", parseInt(item.amount) + parseInt(amountToAdd))
+    updateField(item.id, "date", getDate())
   }
 
   const updateName = (event) => {
     updateField(item.id, "name", event.target.value);
+    updateField(item.id, "date", getDate())
   };
-
-  var getDate = () => {
-    var currentdate = new Date();
-    var out = currentdate.getDate() + "/"
-    + (currentdate.getMonth()+1)  + "/" 
-    + currentdate.getFullYear() + " @ "  
-    + currentdate.getHours() + ":"  
-    + currentdate.getMinutes() + ":" 
-    + currentdate.getSeconds();
-    return(out);
-  }
 
   const updateAmount = (event) => {
     updateField(item.id, "amount", event.target.value);
