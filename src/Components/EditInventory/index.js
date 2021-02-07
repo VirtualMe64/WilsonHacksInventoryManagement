@@ -17,14 +17,14 @@ const EditInventory = () => {
   ]);
 
   const updateField = (itemId, field, newValue) => {
-    var temp = data;
+    var temp = Array.from(data);
     var dataIndex = temp.findIndex((x) => x.id == itemId);
     temp[dataIndex][field] = newValue;
     setData(temp);
   };
 
   const addItem = (event) =>{
-    var temp = data;
+    var temp = Array.from(data);
     setData([]);
     temp.push(item("New Item", 0, "0/0/0000", "oz", new Date().getTime()));
     setData(temp);
