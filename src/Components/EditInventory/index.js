@@ -25,7 +25,7 @@ const item = (name, amount, date, unit, id, warning, max) => {
     max: max ? max : amount,
   };
 };
-const units = ["oz", "lbs"];
+const units = ["oz", "lbs", "tons", "units", "boxes"];
 
 var getDate = (date) => {
   var currentdate = new Date(date);
