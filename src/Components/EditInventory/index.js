@@ -166,14 +166,13 @@ const EditInventory = (props) => {
           );
         })}
 
-      <div style={style.searchBarDiv}>
-        <input
-          style={style.searchBar}
-          placeholder="Search"
-          value={searchBarInput}
-          onChange={handleSearchBarChange}
-        ></input>
-      </div>
+      <input
+        style={style.searchBar}
+        placeholder="Search"
+        value={searchBarInput}
+        onChange={handleSearchBarChange}
+      ></input>
+      
 
       <button style={style.floatingButton} onClick={() => setShowDiag(true)}>
         <FontAwesomeIcon icon={faPlus} size="4x" color={"#011627"} />
@@ -574,18 +573,13 @@ const style = {
     marginTop: 8,
     marginRight: 8,
   },
-  searchBarDiv: {
-    margin: 0,
-    padding: 0,
-    top: "3%",
-    width: "100vw",
-    position: "absolute",
-  },
   searchBar: {
+    position: "absolute",
+    left: "50%",
+    top: "2.7%",
+    transform: "translateX(-50%)",
     height: 35,
     width: "25%",
-    marginLeft: "auto",
-    marginRight: "auto",
     passing: "10px",
     border: "none",
     outline: "none",
