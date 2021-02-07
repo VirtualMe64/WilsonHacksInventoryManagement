@@ -50,6 +50,8 @@ const ItemObj = (props) => {
   let {item, updateField} = props;
   const [editing, setEditing] = React.useState(false);
 
+  const units = ["oz", "lbs"]
+
   const toggleEditing = () => {
     setEditing(!editing);
   };
@@ -58,8 +60,25 @@ const ItemObj = (props) => {
     updateField(item.id, "name", event.target.value);
   };
 
+  var getDate = () => {
+    var currentdate = new Date();
+    var out = currentdate.getDate() + "/"
+    + (currentdate.getMonth()+1)  + "/" 
+    + currentdate.getFullYear() + " @ "  
+    + currentdate.getHours() + ":"  
+    + currentdate.getMinutes() + ":" 
+    + currentdate.getSeconds();
+    return(out);
+  }
+
   const updateAmount = (event) => {
-    updateField(item.id, "amount", event.target.value);
+    updateItemFunction(item.id, "amount", event.target.value);
+    updateItemFunction(item.id, "date", getDate())
+  };
+
+  const updateUnit = (event) => {
+    updateItemFunction(item.id, "unit", event.target.value);
+    updateItemFunction(item.id, "date", getDate())
   };
 
 
@@ -83,11 +102,22 @@ const ItemObj = (props) => {
             Amount: {item.amount} {item.unit}
           </p>
         ) : (
-          <input
-            defaultValue={item.amount}
-            onChange={updateAmount}
-            style={style.input}
-          />
+          <div style={ style.amountQuantityDiv }>
+            <input
+              defaultValue={item.amount}
+              onChange={updateAmount}
+              style={style.input}
+            />
+            <select name = "Units" style = { style.dropDown } defaultValue = {item.unit} onChange = {updateUnit}>
+              <option key = "None" value="" style = { style.dropDownOption }>None</option>
+              {
+              units.map((unit) => {
+                return <option key = {unit} value={unit} style = { style.dropDownOption }>{unit}</option>;
+              })
+              }
+            </select>
+
+          </div>
         )}
       </RowSection>
       <RowSection width={"20%"}>
@@ -177,6 +207,19 @@ const style = {
     justifyContent: "center",
     alignItems: "center",
     outline: "none"
+  },
+  dropDown: {
+    backgroundColor: "transparent",
+    color: "#995D81",
+    borderColor: "#995D81",
+  },
+  dropDownOption: {
+    backgroundColor: "#011627",
+    color: "#995D81",
+  },
+  amountQuantityDiv: {
+    display: "flex",
+    flexDirection: "row",
   }
 };
 
