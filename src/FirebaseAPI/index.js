@@ -67,6 +67,19 @@ export default class FirebaseAPI {
     });
   }
 
+  static removeItem(data) {
+    return new Promise((resolve, reject) => {
+      firebase
+        .firestore()
+        .collection(this.auth.uid)
+        .doc(data.id)
+        .delete()
+        .then(() => {
+          resolve();
+        });
+    });
+  }
+
   static editItem(data, id) {
     return new Promise((resolve, reject) => {
       firebase
@@ -74,19 +87,6 @@ export default class FirebaseAPI {
         .collection(this.auth.uid)
         .doc(id)
         .update(data)
-        .then(() => {
-          resolve();
-        });
-    });
-  }
-
-  static deleteItem(data) {
-    return new Promise((resolve, reject) => {
-      firebase
-        .firestore()
-        .collection(this.auth.uid)
-        .doc(data.id)
-        .update(data.update)
         .then(() => {
           resolve();
         });

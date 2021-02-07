@@ -84,7 +84,6 @@ const EditInventory = (props) => {
     let editedItem = data;
     let id = editedItem.id;
     delete editedItem.id;
-    editedItem.date = new Date().getTime();
     console.log("Update JSON: " + JSON.stringify(editedItem));
     FirebaseAPI.editItem(editedItem, id).then(() => {
       console.log("added item");
@@ -129,10 +128,9 @@ const EditInventory = (props) => {
   };
 
   const deleteItem = (id) => {
-    var dataIndex = data.findIndex((x) => x.id == id);
-    var item = data[dataIndex]
+    var item = data.find((x) => x.id == id);
     if (window.confirm("Are you sure you want to delete this item: " + item.name)) {
-      console.log("Deleting item")
+      FirebaseAPI.removeItem(item);
     }
   }
 
@@ -210,12 +208,14 @@ const ItemObj = (props) => {
         Math.round(100 * parseFloat(amountToAdd))) /
         100
     );
-    updateField(item.id, "date", new Date());
+    if (amountToAdd !== 0){
+      updateField(item.id, "date", new Date().getTime());
+    }  
   };
 
   const updateName = (event) => {
     updateField(item.id, "name", event.target.value);
-    updateField(item.id, "date", new Date());
+    updateField(item.id, "date", new Date().getTime());
   };
 
   const updateAmount = (event) => {
@@ -225,12 +225,12 @@ const ItemObj = (props) => {
       amountToUse = Math.round(100 * newAmount) / 100;
     }
     updateField(item.id, "amount", amountToUse);
-    updateField(item.id, "date", new Date());
+    updateField(item.id, "date", new Date().getTime());
   };
 
   const updateUnit = (event) => {
     updateField(item.id, "unit", event.target.value);
-    updateField(item.id, "date", new Date());
+    updateField(item.id, "date", new Date().getTime());
   };
 
   const deleteItem = () => {
@@ -411,6 +411,7 @@ const NewItemDialogue = (props) => {
           type="text"
           placeholder="Name"
           style={style.input}
+          autoComplete="off"
         />
         <input
           name="amount"
@@ -421,6 +422,7 @@ const NewItemDialogue = (props) => {
           placeholder="Amount"
           pattern="\d*"
           style={{ ...style.input, color: "#995D81", marginBottom: 8 }}
+          autoComplete="off"
         />
         <input
           name="warning"
@@ -431,6 +433,7 @@ const NewItemDialogue = (props) => {
           placeholder="Warning Threshold"
           pattern="\d+"
           style={{ ...style.input, color: "#995D81", marginBottom: 8 }}
+          autoComplete="off"
         />
         <select
           name="Units"
