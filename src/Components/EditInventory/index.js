@@ -3,6 +3,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { createPortal } from "react-dom";
 
 const item = (name, amount, date, unit, id) => {
@@ -13,41 +14,40 @@ const EditInventory = () => {
   const [data, setData] = React.useState([
     item("Spicy Nuts", 2, "2/6/2021", "oz", 1),
     item("Sour Nuts", 3, "2/6/2021", "oz", 2),
-    item("Sweet Nuts", 7, "2/6/2021", "oz", 3),
-    item("Legume Soup", 1, "2/6/2021", "oz", 4),
-    item("Valentine Special", 14, "2/6/2021", "oz", 5),
-    item("Spicy Nuts", 2, "2/6/2021", "oz", 6),
-    item("Sour Nuts", 3, "2/6/2021", "oz", 7),
-    item("Sweet Nuts", 7, "2/6/2021", "oz", 8),
-    item("Legume Soup", 1, "2/6/2021", "oz", 9),
-    item("Valentine Special", 14, "2/6/2021", "oz", 10),
-    item("Spicy Nuts", 2, "2/6/2021", "oz", 11),
-    item("Sour Nuts", 3, "2/6/2021", "oz", 12),
-    item("Sweet Nuts", 7, "2/6/2021", "oz", 13),
-    item("Legume Soup", 1, "2/6/2021", "oz", 14),
-    item("Valentine Special", 14, "2/6/2021", "oz", 15),
-    item("Spicy Nuts", 2, "2/6/2021", "oz", 16),
-    item("Sour Nuts", 3, "2/6/2021", "oz", 17),
-    item("Sweet Nuts", 7, "2/6/2021", "oz", 18),
-    item("Legume Soup", 1, "2/6/2021", "oz", 19),
-    item("Valentine Special", 14, "2/6/2021", "oz", 20),
   ]);
 
   const updateField = (itemId, field, newValue) => {
-    var temp = data;
+    var temp = Array.from(data);
     var dataIndex = temp.findIndex((x) => x.id == itemId);
     temp[dataIndex][field] = newValue;
     setData(temp);
   };
 
+  const addItem = (event) =>{
+    var temp = Array.from(data);
+    setData([]);
+    temp.push(item("New Item", 0, "0/0/0000", "oz", new Date().getTime()));
+    setData(temp);
+    //console.log(data);
+  }
+
   return (
     <div style={style.divStyle}>
-      {data.map((item) => ItemObj(item, updateField))}
+      {data.map((item) => {
+        console.log('a');
+        return <ItemObj item = {item} updateField = {(itemId, field, newValue) => updateField(itemId, field, newValue)} key={item.id}/>})}
+
+      <button style={style.floatingButton} onClick={() => addItem()}>
+        <FontAwesomeIcon
+              icon={faPlus}
+            />
+      </button>
     </div>
   );
 };
 
-const ItemObj = (item, updateItemFunction) => {
+const ItemObj = (props) => {
+  let {item, updateField} = props;
   const [editing, setEditing] = React.useState(false);
 
   const units = ["oz", "lbs"]
@@ -57,7 +57,7 @@ const ItemObj = (item, updateItemFunction) => {
   };
 
   const updateName = (event) => {
-    updateItemFunction(item.id, "name", event.target.value);
+    updateField(item.id, "name", event.target.value);
   };
 
   var getDate = () => {
@@ -80,6 +80,8 @@ const ItemObj = (item, updateItemFunction) => {
     updateItemFunction(item.id, "unit", event.target.value);
     updateItemFunction(item.id, "date", getDate())
   };
+
+
 
   return (
     <div style={style.itemDivStyle}>
@@ -127,7 +129,7 @@ const ItemObj = (item, updateItemFunction) => {
             icon={!editing ? faEdit : faSave}
             size="2x"
             color={"#FF9F1C"}
-            backgroundColor={"#011627"}
+            backgroundcolor={"#011627"}
           />
         </button>
       </RowSection>
@@ -192,6 +194,19 @@ const style = {
     fontSize: 17,
     marginTop: 8,
     marginRight: 8,
+  },
+  floatingButton: {
+    position: "absolute",
+    bottom: 20 + "px",
+    left: 20 + "px",
+    width: 100 + "px",
+    height: 100 + "px",
+    borderRadius: 50,
+    fontSize: 100,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    outline: "none"
   },
   dropDown: {
     backgroundColor: "transparent",
