@@ -582,6 +582,10 @@ const style = {
     borderBottomColor: "#2EC4B6",
     margin: 0,
     padding: 0,
+    width: "100%",
+    overflow: "hidden",
+    //whiteSpace: "nowrap",
+    overflowWrap: "break-word",
   },
   input: {
     border: "none",
