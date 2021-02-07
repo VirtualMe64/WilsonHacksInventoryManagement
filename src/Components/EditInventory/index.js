@@ -80,12 +80,26 @@ const EditInventory = (props) => {
     console.log("Update JSON: " + JSON.stringify(editedItem));
     FirebaseAPI.editItem(editedItem, id).then(() => {
       console.log("added item");
-      getData();
     });
   };
 
   React.useEffect(() => {
     getData();
+    FirebaseAPI.listener((snap) => {
+      let vals = [];
+      snap.forEach((element) => {
+        vals.push(
+          item(
+            element.name,
+            element.amount,
+            element.date,
+            element.unit,
+            element.id
+          )
+        );
+      });
+      setData(vals);
+    });
   }, []);
 
   const addItem = (name, amount, unit) => {
@@ -99,7 +113,6 @@ const EditInventory = (props) => {
     //temp.push(newItem);
     FirebaseAPI.addItem(newItem).then(() => {
       console.log("added item");
-      getData();
     });
 
     //setData(temp);
@@ -119,6 +132,7 @@ const EditInventory = (props) => {
         console.log('a');
         return <ItemObj item = {item} updateField = {(itemId, field, newValue) => updateField(itemId, field, newValue)} key={item.id}/>})}
 
+
       <div style={ style.searchBarDiv }>
         <input style={style.searchBar} placeholder="Search" value={searchBarInput} onChange={handleSearchBarChange}></input>
       </div>
@@ -127,6 +141,7 @@ const EditInventory = (props) => {
         <FontAwesomeIcon
               icon={faPlus}
             />
+
       </button>
 
       {showDiag && (
@@ -401,6 +416,7 @@ const dialogueStyle = {
     flexDirection: "column",
     margin: "auto",
     padding: 16,
+    boxShadow: "-2px 2px 10px 1px grey",
   },
   title: {
     color: "#2EC4B6",
@@ -497,11 +513,13 @@ const style = {
     width: 100 + "px",
     height: 100 + "px",
     borderRadius: 50,
-    fontSize: 100,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     outline: "none",
+    border: "none",
+    backgroundColor: "#2EC4B6",
+    boxShadow: "-2px 2px 10px 1px grey",
   },
   dropDown: {
     backgroundColor: "transparent",

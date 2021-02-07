@@ -92,4 +92,17 @@ export default class FirebaseAPI {
         });
     });
   }
+
+  static listener(callback) {
+    firebase
+      .firestore()
+      .collection(this.auth.uid)
+      .onSnapshot((querySnapshot) => {
+        let snap = [];
+        querySnapshot.forEach((doc) => {
+          snap.push({ ...doc.data(), id: doc.id });
+        });
+        callback(snap);
+      });
+  }
 }
