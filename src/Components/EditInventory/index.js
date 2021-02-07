@@ -213,12 +213,22 @@ const EditInventory = (props) => {
 const ItemObj = (props) => {
   let { item, updateField } = props;
   const [editing, setEditing] = React.useState(false);
+  const [tempName, setTempName] = React.useState("");
+  const [tempAmount, setTempAmount] = React.useState(0);
+  const [tempUnit, setTempUnit] = React.useState("");
   var initialAmount = item.amount;
 
   const toggleEditing = () => {
     if (editing) {
-      props.saveEdits(item.id);
+        updateField(item.id, "unit", tempUnit.toString());
+        updateField(item.id, "amount", parseFloat(tempAmount.toString()));
+        updateField(item.id, "name", tempName.toString());
+        updateField(item.id, "date", new Date().getTime());
+        props.saveEdits(item.id);
     } else {
+      setTempName(item.name);
+      setTempAmount(item.amount);
+      setTempUnit(item.unit);
       initialAmount = item.amount;
     }
     setEditing(!editing);
@@ -238,8 +248,9 @@ const ItemObj = (props) => {
   };
 
   const updateName = (event) => {
-    updateField(item.id, "name", event.target.value);
-    updateField(item.id, "date", new Date().getTime());
+    setTempName(event.target.value);
+    // updateField(item.id, "name", event.target.value);
+    // updateField(item.id, "date", new Date().getTime());
   };
 
   const updateAmount = (event) => {
@@ -248,13 +259,15 @@ const ItemObj = (props) => {
     if (!isNaN(newAmount)) {
       amountToUse = Math.round(100 * newAmount) / 100;
     }
-    updateField(item.id, "amount", amountToUse);
-    updateField(item.id, "date", new Date().getTime());
+    setTempAmount(amountToUse);
+    // updateField(item.id, "amount", amountToUse);
+    // updateField(item.id, "date", new Date().getTime());
   };
 
   const updateUnit = (event) => {
-    updateField(item.id, "unit", event.target.value);
-    updateField(item.id, "date", new Date().getTime());
+    setTempUnit(event.target.value);
+    // updateField(item.id, "unit", event.target.value);
+    // updateField(item.id, "date", new Date().getTime());
   };
 
   const deleteItem = () => {
