@@ -8,6 +8,7 @@ import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons"
 import { createPortal } from "react-dom";
 import FirebaseAPI from "../../FirebaseAPI";
+import Sorting from "./Sorting";
 
 const item = (name, amount, date, unit, id, warning) => {
   return {
@@ -142,12 +143,14 @@ const EditInventory = (props) => {
 
   return (
     <div style={style.divStyle}>
+      <Sorting/>
       {data
         .filter(
           (x) =>
             searchBarInput == "" ||
             x.name.toLowerCase().indexOf(searchBarInput.toLowerCase()) != -1
         )
+        .sort()
         .map((item) => {
           console.log("a");
           return (
@@ -171,6 +174,7 @@ const EditInventory = (props) => {
           onChange={handleSearchBarChange}
         ></input>
       </div>
+      
 
       <button style={style.floatingButton} onClick={() => setShowDiag(true)}>
         <FontAwesomeIcon icon={faPlus} size="4x" color={"#011627"} />
