@@ -16,9 +16,9 @@ var getDate = () => {
   var out = currentdate.getDate() + "/"
   + (currentdate.getMonth()+1)  + "/" 
   + currentdate.getFullYear() + " @ "  
-  + currentdate.getHours() + ":"  
-  + currentdate.getMinutes() + ":" 
-  + currentdate.getSeconds();
+  + (currentdate.getHours() < 10 ? ("0" + currentdate.getHours()) : currentdate.getHours()) + ":"  
+  + (currentdate.getMinutes() < 10 ? ("0" + currentdate.getMinutes()) : currentdate.getMinutes()) + ":" 
+  + (currentdate.getSeconds() < 10 ? ("0" + currentdate.getSeconds()) : currentdate.getSeconds());
   return(out);
 }
 
@@ -86,23 +86,6 @@ const ItemObj = (props) => {
   const updateName = (event) => {
     updateField(item.id, "name", event.target.value);
     updateField(item.id, "date", getDate())
-  };
-
-  var getDate = () => {
-    var currentdate = new Date();
-    var out =
-      currentdate.getDate() +
-      "/" +
-      (currentdate.getMonth() + 1) +
-      "/" +
-      currentdate.getFullYear() +
-      " @ " +
-      currentdate.getHours() +
-      ":" +
-      currentdate.getMinutes() +
-      ":" +
-      currentdate.getSeconds();
-    return out;
   };
 
   const updateAmount = (event) => {
