@@ -33,16 +33,16 @@ const SortingBar = (props) => {
     });
     
     const updateDirection = (name) => {
-        console.log("state changed");
         changeState((s) => {
-            if(s.name == name){
-                s.direction = !s.direction;
+            var temp = {...s}
+            if(temp.name == name){
+                temp.direction = !temp.direction;
             }
             else{
-                s.name = name;
-                s.direction = true;
+                temp.name = name;
+                temp.direction = true;
             }
-            return(s)
+            return temp
         })
     }
 
@@ -51,13 +51,13 @@ const SortingBar = (props) => {
             {sortOptions.map((sortType) => {
                 return(
                     <div onClick={() => updateDirection(sortType.name)} style={{width: sortType.width, display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
-                        {console.log(sortType)}
                         <h1>{sortType.name}</h1>
+                        {console.log(state)}
                         {sortType.name !== state.name && sortType.name !=="" && (
                             <FontAwesomeIcon size="lg" icon={faSort}/>
                         )}
                         {sortType.name === state.name && (
-                            <FontAwesomeIcon size="lg" icon={sortType.direction ? faSortDown : faSortUp}/>
+                            <FontAwesomeIcon size="lg" icon={state.direction ? faSortUp : faSortDown}/>
                         )}
                     </div>
                 )
