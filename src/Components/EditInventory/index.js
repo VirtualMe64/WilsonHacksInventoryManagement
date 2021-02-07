@@ -38,6 +38,9 @@ var getDate = (date) => {
   return out;
 };
 
+
+export { getDate, units, item };
+
 const EditInventory = (props) => {
   const [data, setData] = React.useState([
     item("Tumeric-Chili Almond and Cashew", 2, getDate(), "oz", 1),
@@ -241,7 +244,7 @@ const ItemObj = (props) => {
     <div style={style.itemDivStyle}>
       <RowSection width={"20%"}>
         {!editing ? (
-          <h2 style={{ ...style.title }}>{item.name}</h2>
+          <h2 style={{ ...style.title34 }}>{item.name}</h2>
         ) : (
           <input
             style={{ ...style.input, ...style.title }}
@@ -393,6 +396,8 @@ const AddValueForm = (props) => {
     </div>
   );
 };
+
+export { AddValueForm };
 const NewItemDialogue = (props) => {
   const [name, setName] = React.useState("");
   const [amount, setAmount] = React.useState("");

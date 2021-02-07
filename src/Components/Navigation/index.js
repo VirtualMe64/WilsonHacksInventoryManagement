@@ -5,6 +5,7 @@ import { faBoxes } from "@fortawesome/free-solid-svg-icons";
 import { faTachometerAlt } from "@fortawesome/free-solid-svg-icons";
 import { createPortal } from "react-dom";
 import EditInventory from "../EditInventory";
+import Dashboard from "../Dashboard";
 
 const Navigation = () => {
   const [view, setView] = React.useState(0);
@@ -42,6 +43,7 @@ const Navigation = () => {
       </div>
       <div style={style.content}>
         {view === 0 && <EditInventory height={"calc(100vh-100px)"} />}
+        {view === 1 && <Dashboard height={"calc(100vh-100px)"} />}
       </div>
     </div>
   );
