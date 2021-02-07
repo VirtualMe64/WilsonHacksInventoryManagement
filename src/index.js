@@ -10,7 +10,7 @@ require("react-web-vector-icons/fonts");
 
 ReactDOM.render(
   <React.StrictMode>
-    <EditInventory />
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );
