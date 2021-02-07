@@ -72,13 +72,13 @@ const ItemObj = (props) => {
   }
 
   const updateAmount = (event) => {
-    updateItemFunction(item.id, "amount", event.target.value);
-    updateItemFunction(item.id, "date", getDate())
+    updateField(item.id, "amount", event.target.value);
+    updateField(item.id, "date", getDate())
   };
 
   const updateUnit = (event) => {
-    updateItemFunction(item.id, "unit", event.target.value);
-    updateItemFunction(item.id, "date", getDate())
+    updateField(item.id, "unit", event.target.value);
+    updateField(item.id, "date", getDate())
   };
 
 
