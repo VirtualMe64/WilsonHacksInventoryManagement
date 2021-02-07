@@ -1,11 +1,12 @@
 import { findByLabelText } from "@testing-library/react";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faThList } from "@fortawesome/free-solid-svg-icons";
+import { faSignOutAlt, faThList } from "@fortawesome/free-solid-svg-icons";
 import { faTachometerAlt } from "@fortawesome/free-solid-svg-icons";
 import { createPortal } from "react-dom";
 import EditInventory from "../EditInventory";
 import Dashboard from "../Dashboard";
+import FirebaseAPI from "../../FirebaseAPI";
 
 const Navigation = () => {
   const [view, setView] = React.useState(0);
@@ -36,6 +37,21 @@ const Navigation = () => {
         >
           <FontAwesomeIcon
             icon={faThList}
+            size="4x"
+            color={view === 1 ? "#011627" : "#2EC4B6"}
+          />
+        </button>
+        <button
+          style={{
+            ...style.barButtons,
+            backgroundColor: view === 1 ? "#2EC4B6" : "#011627",
+            borderColor: view === 1 ? "#2EC4B6" : "#2EC4B6",
+            marginLeft: "auto",
+          }}
+          onClick={() => FirebaseAPI.signOut()}
+        >
+          <FontAwesomeIcon
+            icon={faSignOutAlt}
             size="4x"
             color={view === 1 ? "#011627" : "#2EC4B6"}
           />

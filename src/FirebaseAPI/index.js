@@ -39,6 +39,20 @@ export default class FirebaseAPI {
     });
   }
 
+  static signOut() {
+    console.log("signing in");
+    return new Promise((resolve, reject) => {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          localStorage.removeItem("credentials");
+          window.location.reload(false);
+        })
+        .catch((err) => {});
+    });
+  }
+
   static getItems() {
     return new Promise((resolve, reject) => {
       firebase
