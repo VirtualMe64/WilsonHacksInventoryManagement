@@ -5,7 +5,7 @@ import { faEdit, faStickyNote, faWindowRestore } from "@fortawesome/free-solid-s
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
-import { faTrash } from "@fortawesome/free-solid-svg-icons"
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { createPortal } from "react-dom";
 import FirebaseAPI from "../../FirebaseAPI";
 import Sorting from "./Sorting";
@@ -140,17 +140,17 @@ const EditInventory = (props) => {
   const handleSearchBarChange = (event) => {
     setSearchBarInput(event.target.value);
   };
-
+  const [sortMethod, changeSort] = React.useState(null)
   return (
     <div style={style.divStyle}>
-      <Sorting/>
+      <Sorting sortFunction={changeSort}/>
       {data
         .filter(
           (x) =>
             searchBarInput == "" ||
             x.name.toLowerCase().indexOf(searchBarInput.toLowerCase()) != -1
         )
-        .sort()
+        .sort(sortMethod)
         .map((item) => {
           console.log("a");
           return (

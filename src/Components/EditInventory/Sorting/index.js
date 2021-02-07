@@ -44,6 +44,34 @@ const SortingBar = (props) => {
             }
             return temp
         })
+        props.sortFunction(sortingMethod())
+    }
+
+    const nameSort = (x,y) => {
+        return x.name.toLowerCase().compareTo(y.name.toLowerCase()) > 0
+    }
+    const quantitySort = (x,y) => {
+        if(x.unit !== y.unit){
+            return x.unit.compareTo(y.unit)
+        }
+        return x.amount > y.amount
+    }
+    const dateSort = (x,y) => {
+        return x.date.getTime() < y.date.getTime()
+    }
+
+    const sortingMethod = () => {
+        switch(state.name){
+            case "Name":
+                return nameSort
+            case "Quantity":
+                return quantitySort
+            case "Last Changed":
+                return dateSort
+            default:
+                console.log("how")
+                break
+        }
     }
 
     return(
@@ -51,13 +79,13 @@ const SortingBar = (props) => {
             {sortOptions.map((sortType) => {
                 return(
                     <div onClick={() => updateDirection(sortType.name)} style={{width: sortType.width, display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
-                        <h1>{sortType.name}</h1>
+                        <h1 style={{color: "#2EC4B6"}}>{sortType.name}</h1>
                         {console.log(state)}
                         {sortType.name !== state.name && sortType.name !=="" && (
-                            <FontAwesomeIcon size="lg" icon={faSort}/>
+                            <FontAwesomeIcon size="lg" icon={faSort} style={{color: "#2EC4B6"}}/>
                         )}
                         {sortType.name === state.name && (
-                            <FontAwesomeIcon size="lg" icon={state.direction ? faSortUp : faSortDown}/>
+                            <FontAwesomeIcon size="lg" icon={state.direction ? faSortUp : faSortDown} style={{color: "#2EC4B6"}}/>
                         )}
                     </div>
                 )
