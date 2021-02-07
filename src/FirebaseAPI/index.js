@@ -20,7 +20,12 @@ export default class FirebaseAPI {
   }
 
   static signIn(userData) {
+    console.log("signing in");
     return new Promise((resolve, reject) => {
+      firebase
+        .auth()
+        .signOut()
+        .catch((err) => {});
       firebase
         .auth()
         .signInWithEmailAndPassword(userData.email, userData.password)
@@ -38,7 +43,7 @@ export default class FirebaseAPI {
     return new Promise((resolve, reject) => {
       firebase
         .firestore()
-        .collection("items")
+        .collection(this.auth.uid)
         .get()
         .then((querySnapshot) => {
           let snap = [];
@@ -54,7 +59,7 @@ export default class FirebaseAPI {
     return new Promise((resolve, reject) => {
       firebase
         .firestore()
-        .collection("items")
+        .collection(this.auth.uid)
         .add(data)
         .then(() => {
           resolve();
@@ -66,7 +71,7 @@ export default class FirebaseAPI {
     return new Promise((resolve, reject) => {
       firebase
         .firestore()
-        .collection("items")
+        .collection(this.auth.uid)
         .doc(data.id)
         .update(data.update)
         .then(() => {
@@ -79,7 +84,7 @@ export default class FirebaseAPI {
     return new Promise((resolve, reject) => {
       firebase
         .firestore()
-        .collection("items")
+        .collection(this.auth.uid)
         .doc(data.id)
         .update(data.update)
         .then(() => {

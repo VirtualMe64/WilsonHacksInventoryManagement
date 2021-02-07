@@ -36,31 +36,40 @@ const EditInventory = (props) => {
     console.log("HERE");
   };
 
-  const addItem = (event) =>{
+  const addItem = (event) => {
     var temp = Array.from(data);
     setData([]);
     temp.push(item("New Item", 0, getDate(), "oz", new Date().getTime()));
     setData(temp);
     //console.log(data);
-  }
+  };
 
   return (
     <div style={style.divStyle}>
       {data.map((item) => {
-        console.log('a');
-        return <ItemObj item = {item} updateField = {(itemId, field, newValue) => updateField(itemId, field, newValue)} key={item.id}/>})}
+        console.log("a");
+        return (
+          <ItemObj
+            item={item}
+            updateField={(itemId, field, newValue) =>
+              updateField(itemId, field, newValue)
+            }
+            key={item.id}
+          />
+        );
+      })}
 
       <button style={style.floatingButton} onClick={() => addItem()}>
-        <FontAwesomeIcon
-              icon={faPlus}
-            />
+        <FontAwesomeIcon icon={faPlus} />
       </button>
+
+      <NewItemDialogue />
     </div>
   );
 };
 
 const ItemObj = (props) => {
-  let {item, updateField} = props;
+  let { item, updateField } = props;
   const [editing, setEditing] = React.useState(false);
 
   const units = ["oz", "lbs"];
@@ -79,17 +88,32 @@ const ItemObj = (props) => {
     updateField(item.id, "date", getDate())
   };
 
+  var getDate = () => {
+    var currentdate = new Date();
+    var out =
+      currentdate.getDate() +
+      "/" +
+      (currentdate.getMonth() + 1) +
+      "/" +
+      currentdate.getFullYear() +
+      " @ " +
+      currentdate.getHours() +
+      ":" +
+      currentdate.getMinutes() +
+      ":" +
+      currentdate.getSeconds();
+    return out;
+  };
+
   const updateAmount = (event) => {
     updateField(item.id, "amount", event.target.value);
-    updateField(item.id, "date", getDate())
+    updateField(item.id, "date", getDate());
   };
 
   const updateUnit = (event) => {
     updateField(item.id, "unit", event.target.value);
-    updateField(item.id, "date", getDate())
+    updateField(item.id, "date", getDate());
   };
-
-
 
   return (
     <div style={style.itemDivStyle}>
@@ -140,7 +164,7 @@ const ItemObj = (props) => {
         <p>Last Edited: {item.date}</p>
       </RowSection>
       <RowSection width={"20%"}>
-        <AddValueForm addAmountFunction = {addAmount} />
+        <AddValueForm addAmountFunction={addAmount} />
       </RowSection>
       <RowSection style={{ marginLeft: "auto", paddingRight: 20 }}>
         <button style={{ ...style.iconButton }} onClick={toggleEditing}>
@@ -177,8 +201,8 @@ const AddValueForm = (props) => {
   const [inputValue, setInputValue] = React.useState(0);
 
   const onChange = (event) => {
-    setInputValue(event.target.value)
-  }
+    setInputValue(event.target.value);
+  };
 
   const addAmount = (sign, value) => {
     if (isNaN(parseFloat(value))) {
@@ -190,36 +214,47 @@ const AddValueForm = (props) => {
     } else {
       props.addAmountFunction(Math.round((sign * value) * 100) / 100);
     }
-  }
+  };
 
   const addValue = () => {
     addAmount(1, inputValue);
-  }
+  };
 
   const subtractValue = () => {
     addAmount(-1, inputValue);
-  }
+  };
 
   return (
     <div>
-      <button style={ style.iconButton } onClick = {addValue}> <FontAwesomeIcon
-        icon={faPlus}
-        size="2x"
-        color="#1ced4a"
-        backgroundColor="#011627"
-      /> </button>
-      <input style = {{ textAlign: "center", width:"20%", ...style.input }} type = "number" min = {0} step = "any" pattern="\d+" 
-      onChange = {onChange} value = {inputValue}>
-      </input>
-      <button style={ style.iconButton } onClick = {subtractValue}> <FontAwesomeIcon
-        icon={faMinus}
-        size="2x"
-        color="#e02b34"
-        backgroundColor="#011627"
-      /> </button>
+      <button style={style.iconButton} onClick={addValue}>
+        {" "}
+        <FontAwesomeIcon
+          icon={faPlus}
+          size="2x"
+          color="#1ced4a"
+          backgroundColor="#011627"
+        />{" "}
+      </button>
+      <input
+        style={{ textAlign: "center", width: "20%", ...style.input }}
+        type="number"
+        min={0}
+        pattern="\d+"
+        onChange={onChange}
+        value={inputValue}
+      ></input>
+      <button style={style.iconButton} onClick={subtractValue}>
+        {" "}
+        <FontAwesomeIcon
+          icon={faMinus}
+          size="2x"
+          color="#e02b34"
+          backgroundColor="#011627"
+        />{" "}
+      </button>
     </div>
-  )
-}
+  );
+};
 
 const style = {
   divStyle: {
@@ -270,7 +305,7 @@ const style = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    outline: "none"
+    outline: "none",
   },
   dropDown: {
     backgroundColor: "transparent",
