@@ -1,8 +1,10 @@
 import { findByLabelText } from "@testing-library/react";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faStickyNote } from "@fortawesome/free-solid-svg-icons";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { createPortal } from "react-dom";
 
 const item = (name, amount, date, unit, id) => {
@@ -38,6 +40,7 @@ const EditInventory = () => {
     var dataIndex = temp.findIndex((x) => x.id == itemId);
     temp[dataIndex][field] = newValue;
     setData(temp);
+    console.log("WHY NO UPDATE");
   };
 
   return (
@@ -55,6 +58,10 @@ const ItemObj = (item, updateItemFunction) => {
   const toggleEditing = () => {
     setEditing(!editing);
   };
+
+  const addAmount = (amountToAdd) => {
+    updateItemFunction(item.id, "amount", parseInt(item.amount) + parseInt(amountToAdd))
+  }
 
   const updateName = (event) => {
     updateItemFunction(item.id, "name", event.target.value);
@@ -108,6 +115,9 @@ const ItemObj = (item, updateItemFunction) => {
       <RowSection width={"20%"}>
         <p>Last Edited: {item.date}</p>
       </RowSection>
+      <RowSection width={"20%"}>
+        <AddValueForm addAmountFunction = {addAmount} />
+      </RowSection>
       <RowSection style={{ marginLeft: "auto", paddingRight: 20 }}>
         <button style={{ ...style.iconButton }} onClick={toggleEditing}>
           <FontAwesomeIcon
@@ -138,6 +148,44 @@ const RowSection = (props) => {
     </div>
   );
 };
+
+const AddValueForm = (props) => {
+  const [inputValue, setInputValue] = React.useState(0);
+
+  const onChange = (event) => {
+    setInputValue(event.target.value)
+  }
+
+  const addValue = () => {
+    props.addAmountFunction(inputValue)
+    setInputValue(0);
+  }
+
+  const subtractValue = () => {
+    props.addAmountFunction(-1 * inputValue)
+    setInputValue(0);
+  }
+
+  return (
+    <div>
+      <button style={ style.iconButton } onClick = {addValue}> <FontAwesomeIcon
+        icon={faPlus}
+        size="2x"
+        color="#1ced4a"
+        backgroundColor="#011627"
+      /> </button>
+      <input style = {{ textAlign: "center", width:"20%", ...style.input }} type = "number"
+      onChange = {onChange} value = {inputValue}>
+      </input>
+      <button style={ style.iconButton } onClick = {subtractValue}> <FontAwesomeIcon
+        icon={faMinus}
+        size="2x"
+        color="#e02b34"
+        backgroundColor="#011627"
+      /> </button>
+    </div>
+  )
+}
 
 const style = {
   divStyle: {
