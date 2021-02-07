@@ -1,41 +1,74 @@
 import { findByLabelText } from "@testing-library/react";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faBoxes } from "@fortawesome/free-solid-svg-icons";
+import { faTachometerAlt } from "@fortawesome/free-solid-svg-icons";
 import { createPortal } from "react-dom";
 import EditInventory from "../EditInventory";
 
 const Navigation = () => {
-  return <EditInventory />;
+  const [view, setView] = React.useState(0);
+  return (
+    <div style={style.main}>
+      <div style={style.barContainer}>
+        <button
+          style={{
+            ...style.barButtons,
+            backgroundColor: view === 0 ? "#2EC4B6" : "#011627",
+            borderColor: view === 0 ? "#2EC4B6" : "#2EC4B6",
+          }}
+          onClick={() => setView(0)}
+        >
+          <FontAwesomeIcon
+            icon={faBoxes}
+            size="4x"
+            color={view === 0 ? "#011627" : "#2EC4B6"}
+          />
+        </button>
+        <button
+          style={{
+            ...style.barButtons,
+            backgroundColor: view === 1 ? "#2EC4B6" : "#011627",
+            borderColor: view === 1 ? "#2EC4B6" : "#2EC4B6",
+          }}
+          onClick={() => setView(1)}
+        >
+          <FontAwesomeIcon
+            icon={faTachometerAlt}
+            size="4x"
+            color={view === 1 ? "#011627" : "#2EC4B6"}
+          />
+        </button>
+      </div>
+      <div style={style.content}>
+        {view === 0 && <EditInventory height={"calc(100vh-100px)"} />}
+      </div>
+    </div>
+  );
 };
 
 const style = {
-  divStyle: {
-    display: "flex",
-    flexDirection: "column",
-    backgroundColor: "#011627",
-    height: "100vh",
-    overflowX: "hidden",
-    overflowY: "scroll",
-  },
-  itemDivStyle: {
-    //flexGrow: 1,
+  barContainer: {
+    width: "100vw",
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
-    border: "solid 1px #FDFFFC",
-    borderRadius: 20,
-    padding: 8,
-    margin: 8,
-    height: "40px",
   },
-  iconButton: {
-    backgroundColor: "#011627",
+  barButtons: {
+    margin: 8,
     border: "none",
     outline: "none",
+    padding: 8,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderStyle: "solid",
   },
-  title: {
-    color: "#2EC4B6",
+  main: {
+    overflow: "hidden",
+    height: "100vh",
+  },
+  content: {
+    overflowY: "scroll",
+    height: "90vh",
   },
 };
 
