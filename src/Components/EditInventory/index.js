@@ -59,7 +59,7 @@ const ItemObj = (props) => {
   };
 
   const addAmount = (amountToAdd) => {
-    updateItemFunction(item.id, "amount", parseInt(item.amount) + parseInt(amountToAdd))
+    updateField(item.id, "amount", parseInt(item.amount) + parseInt(amountToAdd))
   }
 
   const updateName = (event) => {
