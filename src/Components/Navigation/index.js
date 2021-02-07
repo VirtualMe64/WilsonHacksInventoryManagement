@@ -44,17 +44,13 @@ const Navigation = () => {
         <button
           style={{
             ...style.barButtons,
-            backgroundColor: view === 1 ? "#2EC4B6" : "#011627",
-            borderColor: view === 1 ? "#2EC4B6" : "#2EC4B6",
+            backgroundColor: "#011627",
+            borderColor: "#2EC4B6",
             marginLeft: "auto",
           }}
           onClick={() => FirebaseAPI.signOut()}
         >
-          <FontAwesomeIcon
-            icon={faSignOutAlt}
-            size="4x"
-            color={view === 1 ? "#011627" : "#2EC4B6"}
-          />
+          <FontAwesomeIcon icon={faSignOutAlt} size="4x" color={"#2EC4B6"} />
         </button>
       </div>
       <div style={style.content}>
