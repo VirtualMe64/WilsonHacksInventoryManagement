@@ -123,25 +123,41 @@ const EditInventory = (props) => {
 
   const handleSearchBarChange = (event) => {
     setSearchBarInput(event.target.value);
-  }
+  };
 
   return (
     <div style={style.divStyle}>
-      {data.filter((x) => searchBarInput == "" ||
-        x.name.toLowerCase().indexOf(searchBarInput.toLowerCase()) != -1).map((item) => {
-        console.log('a');
-        return <ItemObj item = {item} updateField = {(itemId, field, newValue) => updateField(itemId, field, newValue)} key={item.id}/>})}
+      {data
+        .filter(
+          (x) =>
+            searchBarInput == "" ||
+            x.name.toLowerCase().indexOf(searchBarInput.toLowerCase()) != -1
+        )
+        .map((item) => {
+          console.log("a");
+          return (
+            <ItemObj
+              saveEdits={(id) => editData(data.find((x) => x.id === id))}
+              item={item}
+              updateField={(itemId, field, newValue) =>
+                updateField(itemId, field, newValue)
+              }
+              key={item.id}
+            />
+          );
+        })}
 
-
-      <div style={ style.searchBarDiv }>
-        <input style={style.searchBar} placeholder="Search" value={searchBarInput} onChange={handleSearchBarChange}></input>
+      <div style={style.searchBarDiv}>
+        <input
+          style={style.searchBar}
+          placeholder="Search"
+          value={searchBarInput}
+          onChange={handleSearchBarChange}
+        ></input>
       </div>
 
       <button style={style.floatingButton} onClick={() => addItem()}>
-        <FontAwesomeIcon
-              icon={faPlus}
-            />
-
+        <FontAwesomeIcon icon={faPlus} />
       </button>
 
       {showDiag && (
