@@ -1,7 +1,7 @@
 import { findByLabelText } from "@testing-library/react";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBoxes } from "@fortawesome/free-solid-svg-icons";
+import { faThList } from "@fortawesome/free-solid-svg-icons";
 import { faTachometerAlt } from "@fortawesome/free-solid-svg-icons";
 import { createPortal } from "react-dom";
 import EditInventory from "../EditInventory";
@@ -21,7 +21,7 @@ const Navigation = () => {
           onClick={() => setView(0)}
         >
           <FontAwesomeIcon
-            icon={faBoxes}
+            icon={faTachometerAlt}
             size="4x"
             color={view === 0 ? "#011627" : "#2EC4B6"}
           />
@@ -35,15 +35,15 @@ const Navigation = () => {
           onClick={() => setView(1)}
         >
           <FontAwesomeIcon
-            icon={faTachometerAlt}
+            icon={faThList}
             size="4x"
             color={view === 1 ? "#011627" : "#2EC4B6"}
           />
         </button>
       </div>
       <div style={style.content}>
-        {view === 0 && <EditInventory height={"calc(100vh-100px)"} />}
-        {view === 1 && <Dashboard height={"calc(100vh-100px)"} />}
+        {view === 1 && <EditInventory height={"calc(100vh-100px)"} />}
+        {view === 0 && <Dashboard height={"calc(100vh-100px)"} />}
       </div>
     </div>
   );

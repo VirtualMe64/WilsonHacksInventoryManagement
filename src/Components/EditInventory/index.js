@@ -47,17 +47,7 @@ var getDate = (date) => {
 export { getDate, units, item };
 
 const EditInventory = (props) => {
-  const [data, setData] = React.useState([
-    item("Tumeric-Chili Almond and Cashew", 2, getDate(), "oz", 1),
-    item("Tumeric-Chili Cashew", 3, getDate(), "oz", 2),
-    item("Savory Pecan", 12, getDate(), "oz", 3),
-    item("Chili Pecan", 17, getDate(), "oz", 4),
-    item("Boso Maple Dipped Pecans", 3, getDate(), "oz", 5),
-    item("Vanilla Candied Almond", 45, getDate(), "oz", 6),
-    item("Candied Red Peanuts", 93, getDate(), "oz", 7),
-    item("Honey Chipotle Peanut", 54, getDate(), "oz", 8),
-    item("Eight Snack Bags Variety Pack", 54, getDate(), "oz", 9),
-  ]);
+  const [data, setData] = React.useState([]);
 
   const [searchBarInput, setSearchBarInput] = React.useState("");
 
@@ -262,6 +252,15 @@ const ItemObj = (props) => {
     // updateField(item.id, "amount", amountToUse);
     // updateField(item.id, "date", new Date().getTime());
   };
+  const updateWarning = (event) => {
+    var newAmount = parseFloat(event.target.value);
+    var amountToUse = initialAmount;
+    if (!isNaN(newAmount)) {
+      amountToUse = Math.round(100 * newAmount) / 100;
+    }
+    updateField(item.id, "warning", amountToUse);
+    updateField(item.id, "date", new Date().getTime());
+  };
 
   const updateUnit = (event) => {
     setTempUnit(event.target.value);
@@ -293,31 +292,45 @@ const ItemObj = (props) => {
             {item.max == 0 ? 0 : Math.round((item.amount / item.max) * 100)}%
           </p>
         ) : (
-          <div style={style.amountQuantityDiv}>
-            <input
-              type="number"
-              pattern="\d*"
-              defaultValue={item.amount}
-              onChange={updateAmount}
-              style={style.input}
-            />
-            <select
-              name="Units"
-              style={style.dropDown}
-              defaultValue={item.unit}
-              onChange={updateUnit}
-            >
-              <option key="None" value="" style={style.dropDownOption}>
-                None
-              </option>
-              {units.map((unit) => {
-                return (
-                  <option key={unit} value={unit} style={style.dropDownOption}>
-                    {unit}
-                  </option>
-                );
-              })}
-            </select>
+          <div style={{}}>
+            <div style={style.amountQuantityDiv}>
+              <input
+                type="number"
+                pattern="\d*"
+                defaultValue={item.amount}
+                onChange={updateAmount}
+                style={{ ...style.input, width: "80%" }}
+              />
+              <select
+                name="Units"
+                style={style.dropDown}
+                defaultValue={item.unit}
+                onChange={updateUnit}
+              >
+                <option key="None" value="" style={style.dropDownOption}>
+                  None
+                </option>
+                {units.map((unit) => {
+                  return (
+                    <option
+                      key={unit}
+                      value={unit}
+                      style={style.dropDownOption}
+                    >
+                      {unit}
+                    </option>
+                  );
+                })}
+              </select>
+              <input
+                type="number"
+                pattern="\d*"
+                defaultValue={item.warning}
+                onChange={updateWarning}
+                style={{ ...style.input, width: "100%", marginLeft: 8 }}
+                placeholder={"Warning Threshold"}
+              />
+            </div>
           </div>
         )}
       </RowSection>
@@ -464,7 +477,7 @@ const NewItemDialogue = (props) => {
           type="number"
           placeholder="Amount"
           pattern="\d*"
-          style={{ ...style.input, color: "#995D81", marginBottom: 8 }}
+          style={{ ...style.input, color: "#995D81" }}
           autoComplete="off"
         />
         <input
@@ -663,6 +676,8 @@ const style = {
   amountQuantityDiv: {
     display: "flex",
     flexDirection: "row",
+    overflow: "hidden",
+    justifyContent: "space-between",
   },
 };
 

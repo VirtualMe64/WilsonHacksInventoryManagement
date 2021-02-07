@@ -24,7 +24,8 @@ const Dashboard = (props) => {
             element.date,
             element.unit,
             element.id,
-            element.warning
+            element.warning,
+            element.max
           )
         );
       });
@@ -50,7 +51,7 @@ const Dashboard = (props) => {
     temp[dataIndex][field] = newValue;
     setData(temp);
     console.log("HERE");
-    editData(data[dataIndex])
+    editData(data[dataIndex]);
   };
 
   React.useEffect(() => {
@@ -105,7 +106,8 @@ const Dashboard = (props) => {
             element.date,
             element.unit,
             element.id,
-            element.warning
+            element.warning,
+            element.max
           )
         );
       });
@@ -199,7 +201,8 @@ const ItemObj = (props) => {
       )}
       {!editing ? (
         <p>
-          Amount: {item.amount} {item.unit}
+          {item.amount} {item.unit} {Math.round((item.amount / item.max) * 100)}
+          %
         </p>
       ) : (
         <div style={style.amountQuantityDiv}>
@@ -227,7 +230,7 @@ const ItemObj = (props) => {
           </select>
         </div>
       )}
-      <p>Last Edited: {getDate(item.date)}</p>
+      <p>{getDate(item.date)}</p>
       <AddValueForm addAmountFunction={addAmount} />
     </div>
   );
