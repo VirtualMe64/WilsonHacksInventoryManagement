@@ -50,6 +50,7 @@ const Dashboard = (props) => {
     temp[dataIndex][field] = newValue;
     setData(temp);
     console.log("HERE");
+    editData(data[dataIndex])
   };
 
   React.useEffect(() => {
@@ -131,9 +132,10 @@ const Dashboard = (props) => {
                         <ItemObj
                           item={item}
                           updateField={updateField}
-                          saveEdits={(id) =>
-                            editData(data.find((x) => x.id === id))
-                          }
+                          saveEdits={(id) => {
+                            console.log("editing data");
+                            editData(data.find((x) => x.id === item.id));
+                          }}
                         />
                       );
                     })}

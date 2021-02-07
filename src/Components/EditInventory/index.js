@@ -1,11 +1,15 @@
 import { findByLabelText } from "@testing-library/react";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faStickyNote, faWindowRestore } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faStickyNote,
+  faWindowRestore,
+} from "@fortawesome/free-solid-svg-icons";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
-import { faTrash } from "@fortawesome/free-solid-svg-icons"
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { createPortal } from "react-dom";
 import FirebaseAPI from "../../FirebaseAPI";
 
@@ -38,7 +42,6 @@ var getDate = (date) => {
   return out;
 };
 
-
 export { getDate, units, item };
 
 const EditInventory = (props) => {
@@ -62,6 +65,7 @@ const EditInventory = (props) => {
     temp[dataIndex][field] = newValue;
     setData(temp);
     console.log("HERE");
+    editData(data[dataIndex]);
   };
 
   const getData = () => {
@@ -132,10 +136,12 @@ const EditInventory = (props) => {
 
   const deleteItem = (id) => {
     var item = data.find((x) => x.id == id);
-    if (window.confirm("Are you sure you want to delete this item: " + item.name)) {
+    if (
+      window.confirm("Are you sure you want to delete this item: " + item.name)
+    ) {
       FirebaseAPI.removeItem(item);
     }
-  }
+  };
 
   const [showDiag, setShowDiag] = React.useState(false);
 
@@ -160,7 +166,7 @@ const EditInventory = (props) => {
               updateField={(itemId, field, newValue) =>
                 updateField(itemId, field, newValue)
               }
-              deleteItemMethod = {(id) => deleteItem(id)}
+              deleteItemMethod={(id) => deleteItem(id)}
               key={item.id}
             />
           );
@@ -197,7 +203,7 @@ const ItemObj = (props) => {
     if (editing) {
       props.saveEdits(item.id);
     } else {
-      initialAmount = item.amount
+      initialAmount = item.amount;
     }
     setEditing(!editing);
   };
@@ -210,9 +216,9 @@ const ItemObj = (props) => {
         Math.round(100 * parseFloat(amountToAdd))) /
         100
     );
-    if (amountToAdd !== 0){
+    if (amountToAdd !== 0) {
       updateField(item.id, "date", new Date().getTime());
-    }  
+    }
   };
 
   const updateName = (event) => {
@@ -237,7 +243,7 @@ const ItemObj = (props) => {
 
   const deleteItem = () => {
     props.deleteItemMethod(item.id);
-  }
+  };
 
   return (
     <div style={style.itemDivStyle}>
@@ -293,18 +299,22 @@ const ItemObj = (props) => {
         <AddValueForm addAmountFunction={addAmount} />
       </RowSection>
       <RowSection style={{ marginLeft: "auto", paddingRight: 20 }}>
-        <div style = {{margin: 0, padding: 0, display: "flex", flexDirection: "row"}}>
-          {editing &&
+        <div
+          style={{
+            margin: 0,
+            padding: 0,
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          {editing && (
             <button
-              style = {{  marginRight: 10, ...style.iconButton }}
-              onClick = {deleteItem}
+              style={{ marginRight: 10, ...style.iconButton }}
+              onClick={deleteItem}
             >
-            <FontAwesomeIcon 
-              icon = {faTrash}
-              size = "2x"
-              color = "#995D81"
-            /> </button>
-          }
+              <FontAwesomeIcon icon={faTrash} size="2x" color="#995D81" />{" "}
+            </button>
+          )}
           <button style={{ ...style.iconButton }} onClick={toggleEditing}>
             <FontAwesomeIcon
               icon={!editing ? faEdit : faSave}
@@ -508,7 +518,7 @@ const dialogueStyle = {
     color: "#2EC4B6",
     width: "100%",
     textAlign: "center",
-    margin: 8,
+    //margin: 8,
   },
   button: {
     width: 100 + "%",
@@ -551,6 +561,7 @@ const style = {
     padding: 8,
     margin: 8,
     justifyContent: "center",
+    //minHeight: 100,
   },
   iconButton: {
     backgroundColor: "#011627",
