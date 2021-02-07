@@ -1,10 +1,11 @@
 import { findByLabelText } from "@testing-library/react";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faStickyNote } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faStickyNote, faWindowRestore } from "@fortawesome/free-solid-svg-icons";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons"
 import { createPortal } from "react-dom";
 import FirebaseAPI from "../../FirebaseAPI";
 
@@ -127,6 +128,14 @@ const EditInventory = (props) => {
     //console.log(data);
   };
 
+  const deleteItem = (id) => {
+    var dataIndex = data.findIndex((x) => x.id == id);
+    var item = data[dataIndex]
+    if (window.confirm("Are you sure you want to delete this item: " + item.name)) {
+      console.log("Deleting item")
+    }
+  }
+
   const [showDiag, setShowDiag] = React.useState(false);
 
   const handleSearchBarChange = (event) => {
@@ -150,6 +159,7 @@ const EditInventory = (props) => {
               updateField={(itemId, field, newValue) =>
                 updateField(itemId, field, newValue)
               }
+              deleteItemMethod = {(id) => deleteItem(id)}
               key={item.id}
             />
           );
@@ -215,6 +225,10 @@ const ItemObj = (props) => {
     updateField(item.id, "date", new Date());
   };
 
+  const deleteItem = () => {
+    props.deleteItemMethod(item.id);
+  }
+
   return (
     <div style={style.itemDivStyle}>
       <RowSection width={"20%"}>
@@ -267,14 +281,27 @@ const ItemObj = (props) => {
         <AddValueForm addAmountFunction={addAmount} />
       </RowSection>
       <RowSection style={{ marginLeft: "auto", paddingRight: 20 }}>
-        <button style={{ ...style.iconButton }} onClick={toggleEditing}>
-          <FontAwesomeIcon
-            icon={!editing ? faEdit : faSave}
-            size="2x"
-            color={"#FF9F1C"}
-            backgroundcolor={"#011627"}
-          />
-        </button>
+        <div style = {{margin: 0, padding: 0, display: "flex", flexDirection: "row"}}>
+          {editing &&
+            <button
+              style = {{  marginRight: 10, ...style.iconButton }}
+              onClick = {deleteItem}
+            >
+            <FontAwesomeIcon 
+              icon = {faTrash}
+              size = "2x"
+              color = "#995D81"
+            /> </button>
+          }
+          <button style={{ ...style.iconButton }} onClick={toggleEditing}>
+            <FontAwesomeIcon
+              icon={!editing ? faEdit : faSave}
+              size="2x"
+              color={"#FF9F1C"}
+              backgroundcolor={"#011627"}
+            />
+          </button>
+        </div>
       </RowSection>
     </div>
   );
