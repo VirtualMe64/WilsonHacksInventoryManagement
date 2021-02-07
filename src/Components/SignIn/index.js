@@ -80,7 +80,7 @@ const SignIn = (props) => {
         />
         <button
           type="submit"
-          onClick={submitLogin}
+          onSubmit={submitLogin}
           style={isDisabled ? style.buttonDisabled : style.button}
           disabled={isDisabled}
         >

@@ -60,12 +60,25 @@ const ItemObj = (item, updateItemFunction) => {
     updateItemFunction(item.id, "name", event.target.value);
   };
 
+  var getDate = () => {
+    var currentdate = new Date();
+    var out = currentdate.getDate() + "/"
+    + (currentdate.getMonth()+1)  + "/" 
+    + currentdate.getFullYear() + " @ "  
+    + currentdate.getHours() + ":"  
+    + currentdate.getMinutes() + ":" 
+    + currentdate.getSeconds();
+    return(out);
+  }
+
   const updateAmount = (event) => {
     updateItemFunction(item.id, "amount", event.target.value);
+    updateItemFunction(item.id, "date", getDate())
   };
 
   const updateUnit = (event) => {
     updateItemFunction(item.id, "unit", event.target.value);
+    updateItemFunction(item.id, "date", getDate())
   };
 
   return (
