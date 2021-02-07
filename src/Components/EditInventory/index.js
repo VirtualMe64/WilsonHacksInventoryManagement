@@ -233,6 +233,7 @@ const ItemObj = (props) => {
     );
     if (amountToAdd !== 0) {
       updateField(item.id, "date", new Date().getTime());
+      props.saveEdits(item.id);
     }
   };
 
