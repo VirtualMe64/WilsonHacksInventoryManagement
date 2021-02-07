@@ -31,6 +31,10 @@ const SortingBar = (props) => {
         //true is up
         direction: true
     });
+
+    React.useEffect(() => {
+        props.sortFunction(() => sortingMethod(state));
+    }, [])
     
     const updateDirection = (name) => {
         changeState((s) => {
@@ -41,41 +45,75 @@ const SortingBar = (props) => {
             else{
                 temp.name = name;
                 temp.direction = true;
-            }
+            } 
+            props.sortFunction(() => sortingMethod(temp));
             return temp
         })
-        props.sortFunction(() => sortingMethod())
     }
 
     const nameSort = (a, b) => {
-        console.log("I am now name sorting")
         if(a.name.toLowerCase() < b.name.toLowerCase()) return -1;
         if(a.name.toLowerCase() > b.name.toLowerCase()) return 1;
         return 0;
     }
 
+    const reverseNameSort = (a, b) => {
+        if(a.name.toLowerCase() < b.name.toLowerCase()) return 1;
+        if(a.name.toLowerCase() > b.name.toLowerCase()) return -1;
+        return 0;
+    }
+
     const quantitySort = (a, b) => {
-        console.log("I am now quantity sorting")
         if(a.unit !== b.unit){
             if(a.unit.toLowerCase() < b.unit.toLowerCase()) return -1;
             if(a.unit.toLowerCase() > b.unit.toLowerCase()) return 1;
         }
         return a.amount - b.amount
     }
-    const dateSort = (a, b) => {
-        if (a.date.getTime() > b.date.getTime()) return 1;
-        if (a.date.getTime() == b.date.getTime()) return 0;
-        if (a.date.getTime() < b.date.getTime()) return -1;
+
+    const reverseQuantitySort = (a, b) => {
+        if(a.unit !== b.unit){
+            if(a.unit.toLowerCase() < b.unit.toLowerCase()) return -1;
+            if(a.unit.toLowerCase() > b.unit.toLowerCase()) return 1;
+        }
+        return b.amount - a.amount
     }
 
-    const sortingMethod = () => {
-        switch(state.name){
+    const dateSort = (a, b) => {
+        if (a.date > b.date) return 1;
+        if (a.date == b.date) return 0;
+        if (a.date < b.date) return -1;
+    }
+
+    const reverseDateSort = (a, b) => {
+        if (a.date > b.date) return -1;
+        if (a.date == b.date) return 0;
+        if (a.date < b.date) return 1;
+    }
+
+    const sortingMethod = (currState) => {;
+        switch(currState.name){
             case "Name":
-                return nameSort
+                if (!currState.direction) {
+                    return nameSort;
+                } else {
+                    return reverseNameSort;
+                }
+
             case "Quantity":
-                return quantitySort
+                if (!currState.direction) {
+                    return quantitySort
+                } else {
+                    return reverseQuantitySort;
+                }
+
             case "Last Changed":
-                return dateSort
+                if (!currState.direction) {
+                    return dateSort;
+                } else {
+                    return reverseDateSort;
+                }
+
             default:
                 console.log("how")
                 break
@@ -88,7 +126,6 @@ const SortingBar = (props) => {
                 return(
                     <div onClick={() => updateDirection(sortType.name)} style={{width: sortType.width, display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
                         <h1 style={{color: "#2EC4B6"}}>{sortType.name}</h1>
-                        {console.log(state)}
                         {sortType.name !== state.name && sortType.name !=="" && (
                             <FontAwesomeIcon size="lg" icon={faSort} style={{color: "#2EC4B6"}}/>
                         )}
