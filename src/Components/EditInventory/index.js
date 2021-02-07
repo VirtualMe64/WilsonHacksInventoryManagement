@@ -191,10 +191,13 @@ const EditInventory = (props) => {
 const ItemObj = (props) => {
   let { item, updateField } = props;
   const [editing, setEditing] = React.useState(false);
+  var initialAmount = item.amount;
 
   const toggleEditing = () => {
     if (editing) {
       props.saveEdits(item.id);
+    } else {
+      initialAmount = item.amount
     }
     setEditing(!editing);
   };
@@ -216,7 +219,12 @@ const ItemObj = (props) => {
   };
 
   const updateAmount = (event) => {
-    updateField(item.id, "amount", event.target.value);
+    var newAmount = parseFloat(event.target.value);
+    var amountToUse = initialAmount;
+    if (!isNaN(newAmount)) {
+      amountToUse = Math.round(100 * newAmount) / 100;
+    }
+    updateField(item.id, "amount", amountToUse);
     updateField(item.id, "date", new Date());
   };
 
@@ -250,6 +258,8 @@ const ItemObj = (props) => {
         ) : (
           <div style={style.amountQuantityDiv}>
             <input
+              type="number"
+              pattern="\d*"
               defaultValue={item.amount}
               onChange={updateAmount}
               style={style.input}
