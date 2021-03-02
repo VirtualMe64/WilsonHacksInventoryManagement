@@ -67,6 +67,7 @@ const style = {
     display: "flex",
     flexDirection: "row",
     borderBottom: "1px solid #a9a9a9",
+    overflowX: "hidden",
   },
   barButtons: {
     margin: 8,
@@ -80,10 +81,12 @@ const style = {
   main: {
     overflow: "hidden",
     height: "100vh",
+    overflowX: "hidden",
   },
   content: {
     overflowY: "scroll",
     height: "90vh",
+    overflowX: "hidden",
   },
 };
 

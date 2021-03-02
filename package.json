@@ -22,7 +22,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "c": "rm dir ../InventoryMangementHosting/public mkdir ../InventoryMangementHosting ",
+    "c": "rmdir ../InventoryMangementHosting/public mkdir ../InventoryMangementHosting ",
     "cp": "cp -r build ../InventoryMangementHosting/public"
   },
   "eslintConfig": {
